@@ -1,0 +1,50 @@
+# ignore files 
+
+/.venv
+/DjangoProject/mysite/secrets.py
+/.DS_Store
+.DS_Store
+
+# Info Files
+DjangoProject/testCases.txt
+
+#ignore MediaFiles except product images
+DjangoProject/media/*
+!DjangoProject/media/product_dev_img1/
+!DjangoProject/media/generic_profile.jpeg
+!DjangoProject/media/no_image_available.jpg
+
+# virtual environment configuration scripts
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ignoring csv,log,xlsx,xls files
+*.log
+*.csv
+*.xlsx
+*.xls
+.env
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST

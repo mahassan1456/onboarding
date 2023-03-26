@@ -1,0 +1,221 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'pproducts/addphysician.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<form enctype="multipart/form-data" class="form" action="./" method="POST" novalidate>
+    {% csrf_token %}
+    <!-- Header Form Title -->
+    <div class="container-title">
+        <div class="form__title">{{header}}</div>
+        <p class="form__desc">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, nostrum? Laudantium molestiae explicabo numquam animi corrupti debitis ratione, accusamus nemo optio eum vero nesciunt facere aperiam! Labore pariatur accusantium exercitationem.
+        </p>
+    </div>
+    
+    <!-- Form Body/Fields -->
+    {% for field in form %}
+    <!-- Account for Product_Tags field which has additional functionality -->
+    {% if field.name == 'specialty_ph' %}
+    <div class="form__item tags_select" id="tags_select" style="display:block;">
+    {% else %}
+    <div class="form__item">
+    {% endif %}
+  
+      {% if field.name == 'specialty_ph' %}
+      <div>
+        <label for="givennames" class="form__label">{{field.label}}</label>
+        <button id="specialty_button_refresh" onclick="refreshProducts(event)" type="submit">Refresh</button>
+        <label for="givennames" class="form__label product-label">Products</label>
+      </div>
+      {% else %}
+      <label for="givennames" class="form__label">{{field.label}}</label>
+      {% endif %}
+      {% if field.name == 'specialty_ph' %}
+      <div class="f11">
+      {{field}}
+      {% else %}
+      {{field}}
+      {% endif %}
+      {% if form.errors %}
+      <span class="form__error">{{field.errors}}</span>
+      {% endif %}
+  {% if field.name == 'specialty_ph' %}
+    {% if edit %}
+    <div name="specialty_selected" id="id_select_box8" class="x2" multiple="">
+        {% for specialty,products in editproductslist.items %}
+        <div class="expandbox">
+          <p class="xp23">{{specialty|title}}</p>
+          <span class="collapse-icon" onclick="addEventsDropDown(event)">+</span>
+       </div>
+       <div></div>
+  
+       <fieldset class="xp24" style="display:none;" name="xp12">
+          {% for product in products %}
+          <div class="qp">
+              <div>
+                  <label for="{{specialty}}{{product.0.id}}" hip80=""> <h6 style="display:inline;"><span class="bullet">•</span><strong> Name: </strong></h6> {{product.0.name}}</label>
+                  <div class="description">
+                    <br>
+                    <span class="description-product"> <h6 style="display:inline;"><strong> Description: </strong> </h6> {{product.0.description}} </span>
+                  </div>
+                  <a class="additionalinfo" style="color:blue;" onclick="additionalInfo(event)">&nbsp;| More </a>
+              </div>
+              <input id="{{specialty}}{{product.0.id}}" hip80="" value="{{product.0.id}}" type="checkbox" name="prod-{{specialty}}" hip="" {{product.1}}>
+          </div>
+          <br>
+          {% endfor %}
+      </fieldset>
+      {% endfor %}
+      </div>
+     </div>
+    {% else %}
+      <div name="specialty_selected" id="id_select_box8" class="x2" multiple="">
+
+
+      </div>
+      
+    </div>
+    {% endif %}
+  {% endif %}
+  </div>
+  {% endfor %}
+ 
+    
+  <div class="form__item">
+    <button class="form__btn" type="submit" id="sbtbutton">{{button_text}}</button>
+  </div>
+  <!-- Closing Form Tag -->
+  </form>
+  
+<script>
+  
+function addEventsDropDown(event) {
+  var fieldset = event.target.parentNode.nextElementSibling.nextElementSibling;
+  var collapseIcon = event.target.parentNode.lastElementChild;
+  if (fieldset.style.display === 'none') {
+    fieldset.style.display = 'block';
+    collapseIcon.textContent = "_";
+  } else {
+    fieldset.style.display = 'none';
+    collapseIcon.textContent = "+";
+  }
+     ;
+    
+  }
+
+function refreshProducts(event) {
+      
+  // In order to submit a POST ajax request the button must be in a form. If the button is not the actual submit button a function
+  // must be called on the event to prevent the default behavior of form submission   
+      event.preventDefault();
+      
+      var token = document.querySelector("input[type=hidden]").value;
+      var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+      var id_select_box8 = document.getElementById("id_select_box8");
+      var json_obj = {};
+      var callbackURL = `{% url 'pproducts:rfsh_products' %}`;
+      if (checkboxes.length > 0) {
+        for (let i = 0; i < checkboxes.length; i++) {
+          var label = checkboxes[i].parentNode.textContent.replace(/[\n\r]+|[\s]{2,}/g, ' ').trim();
+          var val = checkboxes[i].value;
+          json_obj[label] = checkboxes[i].value;
+        }
+
+        $.ajax({
+          type: 'POST',
+          headers: { "X-CSRFToken": token },
+          dataType: "json",
+          data: json_obj,
+          url: callbackURL,
+          // Receiving JSON Response Back from DB
+          success: function(response) {
+            
+            if (response) {
+              
+              var products = response.dataset
+    
+              id_select_box8.innerHTML = "";
+              for (var specialty in products) {
+                
+                id_select_box8.innerHTML = id_select_box8.innerHTML + 
+                `<div class="expandbox">
+                      <p class="xp23">${specialty.toUpperCase()}</p>
+                      <span class="collapse-icon" onclick="addEventsDropDown(event)">+</span>
+                 </div>
+                 <div></div>
+                 <fieldset class="xp24" style="display:none;" name="xp12"></fieldset>`
+                 var fieldset = id_select_box8.lastElementChild;
+                 
+                  for (var product in products[specialty]) {
+                      var prod = products[specialty][product]
+                      fieldset.innerHTML = fieldset.innerHTML +
+                      `<div class="qp">
+                          <div>
+                              <label for=${specialty+prod.id}> <h6 style="display:inline;"><span class="bullet">&#x2022;</span><strong> Name: </strong></h6> ${prod.name} </label>
+                              <div class="description">
+                                <br>
+                                <span class="description-product"> <h6 style="display:inline;"><strong> Description: </strong> </h6> ${prod.description} </span>
+                              </div>
+                              <a class="additionalInfo" style="color:blue;" onclick="additionalInfo(event)">&nbsp| More </a>
+                          </div>
+                          <input id=${specialty+prod.id} value=${prod.id} type="checkbox" name=prod-${specialty}>
+                      </div>
+                      <br>`
+                    }
+                  }
+              }
+           },
+          error: function(xhr) {
+           alert("error")
+          }
+        })
+      } else {
+        id_select_box8.innerHTML = "";
+      }
+    }
+function populateExistingProducts(event) {
+  return
+}
+function additionalInfo() {
+  var element = event.target;
+  console.log(element.class)
+  if (element.previousElementSibling.style.display == 'inline') {
+    element.previousElementSibling.style.display = 'none';
+    element.textContent = " | More";
+  } else {
+    element.previousElementSibling.style.display = 'inline';
+    element.textContent = " | Less";
+  }
+}
+
+// function editornew(event) {
+//   var editflag = "{{edit}}"
+ 
+//   if (editflag == 'True') {
+//     populateExistingProducts()
+//   } else {
+//     refreshProducts()
+//     console.log("false")
+//   }
+// }
+// editornew()
+</script>
+
+{% endblock %}

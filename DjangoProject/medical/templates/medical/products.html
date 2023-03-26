@@ -1,0 +1,102 @@
+{% extends 'medical/base2.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'medical/products.css' %}" type="text/css">
+<style>
+#more_details {
+    
+    background-color: #0fa942;
+    color:whitesmoke;
+    border-radius:7px;
+    border:0.5 solid gray;
+    width:75%;
+}
+.outer-container-button {
+    text-align: center;
+    position: relative;
+    width:100%;
+}
+.parent-mom-container {
+    margin-top:3vh;
+}
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+<div class="parent-mom-container">
+<div>
+    <h2>Products</h2>
+</div>
+<div class="outer-container">
+    <!-- Outer Flex Container - class= container is the only child of this. Another Flex is used to arrange cards. -->
+    <div class="container">
+        <div class="card">
+        <div class="card-header">
+            <img src="{{MEDIA_URL}}/uploads/abc.jpeg" alt="rover" />
+        </div>
+        <div class="card-body">
+            <span class="tag tag-teal">Foot/Ankle</span>
+            <h4>
+             Therapeutic Memory Foam With Gel Inlay For Maximum Comfort
+            </h4>
+
+            <p>
+            The Gel Memory Foam Cushion with Nylon Cover is a pressure-reducing seat that provides a 
+            layer of support to make every chair more comfortable. 
+            </p>
+            <div class="outer-container-button">
+                <button id="more_details">View Details</button>
+            </div>
+        </div>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <img src="https://www.newsbtc.com/wp-content/uploads/2020/06/mesut-kaya-LcCdl__-kO0-unsplash-scaled.jpg" alt="ballons" />
+        </div>
+        <div class="card-body">
+            <span class="tag tag-purple">Popular</span>
+            <h4>
+            How to Keep Going When You Don’t Know What’s Next
+            </h4>
+            <p>
+            The future can be scary, but there are ways to
+            deal with that fear.
+            </p>
+            <div class="user">
+            <img src="https://lh3.googleusercontent.com/ogw/ADGmqu8sn9zF15pW59JIYiLgx3PQ3EyZLFp5Zqao906l=s32-c-mo" alt="user" />
+            <div class="user-info">
+                <h5>Eyup Ucmaz</h5>
+                <small>Yesterday</small>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div class="card">
+        <div class="card-header">
+            <img src="https://images6.alphacoders.com/312/thumb-1920-312773.jpg" alt="city" />
+        </div>
+        <div class="card-body">
+            <span class="tag tag-pink">Design</span>
+            <h4>
+            10 Rules of Dashboard Design
+            </h4>
+            <p>
+            Dashboard Design Guidelines
+            </p>
+            <div class="user">
+            <img src="https://studyinbaltics.ee/wp-content/uploads/2020/03/3799Ffxy.jpg" alt="user" />
+            <div class="user-info">
+                <h5>Carrie Brewer</h5>
+                <small>1w ago</small>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

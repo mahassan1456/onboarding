@@ -1,0 +1,18 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is the HTML for the SuperUser that will see the Master Dashboard with all facilities and hospitals  --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+{% for product in product_set %}
+<p>{{product.name}}</p>
+    {% for image in product.images.all %}
+    <img src="{{MEDIA_URL}}{{image.image}}" alt="{{product.name}}">
+    {% endfor %}
+    {{break}}
+{% endfor %}
+{% endblock %}

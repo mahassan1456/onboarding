@@ -1,0 +1,27 @@
+
+
+
+
+{% for field in form %}
+{% if field.name == 'picture' %}
+<div class="form-group has_input_icon col-12">
+<label for="">{{field.label}}</label>
+{% if form.errors %}
+<label class="form__error" style="color:red;">{{field.errors}}</label>
+{% endif %}
+{{field}}
+</div>
+{% else %}
+<div class="form-group has_input_icon col-12 col-md-6">
+<label for="">{{field.label}}</label>
+{% if form.errors %}
+<label class="form__error" style="color:red;">{{field.errors}}</label>
+{% endif %}
+{{field}}
+</div>
+{% endif %}
+{% endfor %}
+<div class="col-md-6 mx-auto"> <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Add Hospital</button></div>
+
+
+

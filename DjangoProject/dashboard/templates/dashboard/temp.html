@@ -1,0 +1,190 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Administrators will view this page when they send a quick Invite Link to any Hospital Admin.  -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-lg-8 col-md-8">
+            <form class="py-4 body_content_wrapper sm_res" method="POST" action="{% url 'views:view_qs_hospitals' %}">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <!-- Start Recent Invited Hospitals -->
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h2 class="w-100">Recently Invited Hospitals</h2>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <input type="text" id="phoneNumber" class="phone" name="phoneNumber" maxlength="14" placeholder="(xxx) xxx-xxxx" on-input="_allowNumbersCharsOnly" on-change="_formatPhoneNumber">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" name="button" value="search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th>Hospital Name</th>
+                                    <th>Email Adress</th>
+                                    <th>Creator Name</th>
+                                    <th>Phone Number</th>
+                                    <th class="text-center">Zip Code</th>
+                                    <th class="text-center">Note</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for qs_hospital in recently_invited_hospitals %}
+                                <tr>
+                                    <td><a id="object-{{qs_hospital.id}}"  href="#">{{qs_hospital.hospital_name}}</a></td>
+                                    <td>{{qs_hospital.email}}</td>
+                                    <td>{{qs_hospital.get_full_name}}</td>
+                                    <td>{{qs_hospital.phone}}</td>
+                                    <td class="text-center">{{qs_hospital.hospital_zip}}</td>
+                                    <td class="text-center">{{qs_hospital.additional}} </td>
+                                    {% if qs_hospital.is_registered %} 
+                                    <td class="text-center"><a href="#" data-toggle="modal" data-hospital="{{qs_hospital.id}}" data-target="#reminder" style="color:green;pointer-events:none;"> Registered</a></td>
+                                    {% else %}
+                                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-toggle="modal" data-hospital="{{qs_hospital.id}}" data-target="#reminder" class="red"> Registration Not Complete </a></td>
+                                    {% endif %}
+                                </tr>
+								{% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+            </form>
+            <!-- End Recent Invited Hospitals -->
+            <!-- Start Onboarded Hospitals List -->
+            <form class=" body_content_wrapper sm_res" method="POST" action="{% url 'views:view_hospitals' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-7">
+                        <h2 class="w-100">Onboarded Hospitals </h2>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search Onboarded Hospitals">
+                            <div class="input-group-btn">
+                                <button class="btn1 btn-default" name="button" value="search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered my-3 table-sm table-hover">
+                        <thead>
+                            <tr class="align-text-top">
+                                <th>Hospital Name</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for hospital in hospitals %}
+							<tr>
+								<td><a href="#">{{hospital.name}}</a></td>
+								<td>{{hospital.created_at}}</td> 
+							</tr>
+							{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form> 
+            <!-- End Onboarded Hospitals List -->	 
+            </div>
+        </div>
+        <!-- Start right side column -->
+        <div class="col-lg-4 col-md-4 mt-2">
+            <h2 class="py-4">Invite New Hospital Admin User </h2>
+            <!-- Start Invite Hospitals -->	
+            <div class="invite_hospital_wrap">
+                <form class="py-2 needs-validati%on" method="POST" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        {% if field.name == 'hospital_address' or field.name == 'additional' or field.name == 'hospital_name'  %}
+                        <div class="form-group has_input_icon col-12 col-md-12 ">
+                            <label>{{field.label}}</label>
+                            {{field}}
+                        </div>
+                        {% else %}
+                        <div class="form-group has_input_icon col-12 col-md-6 ">
+                            <label>{{field.label}}</label>
+                            {{field}}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-group has_input_icon col-12 col-md-12 ">
+                        <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Send Invitation</button>
+                    </div>
+                </form>
+            </div>
+            <!-- End Invite Hospitals -->	 
+        </div>
+        <!-- End right side column -->
+    </div>
+</div>
+<!-- Start Footer -->
+<!-- Modal -->
+
+{% comment %}
+{% include 'dashboard/components/pop_up_action.html' %}
+{% endcomment %}
+<div class="modal fade" id="reminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Registration is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Hospital User OR Complete Registration Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" id="modal_reminder_button" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" id="modal_manual_reminder_button" class="btn btn-primary btn_blue">Onboard Manually</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function assignLink(event) {
+
+        var value = event.target.getAttribute('data-hospital')
+        var modal_reminder_button = document.getElementById('modal_reminder_button')
+        var modal_manual_reminder_button = document.getElementById('modal_manual_reminder_button')
+        modal_reminder_button.href = `/views/invite/reminder/${value}/`
+        modal_manual_reminder_button.href = `/register/?qs=True&qsid=${value}`
+    }
+
+    let phoneNumber = document.getElementById('id_phone');
+    phoneNumber.addEventListener('change',_formatPhoneNumber);
+    phoneNumber.addEventListener('keyup',_formatPhoneNumber);
+
+    function _formatPhoneNumber(evt) {
+            let number = evt.target.value.replace(/[^\d]/g, '');
+            if (number.length >= 5) {
+                number = `${number.slice(0, 3)}-${number.slice(3,6)}-${number.slice(6,)}`
+             number = `${number.slice(0, 3)}-${number.slice(3, )}`
+                } else if (number >=2 ) {
+                    number = `${number.slice(0, 3)}-${number.slice(3, )}`
+                }
+            evt.target.value = number;
+            }
+
+ 
+
+</script>
+
+{% endblock %}

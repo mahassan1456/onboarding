@@ -1,0 +1,261 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+{{block.super}}
+
+<link rel="stylesheet" href="{% static 'medical/reviewaccount.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+.form {
+
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 16px;
+}
+
+.form * {
+  box-sizing: border-box;
+  line-height: 1.5;
+}
+
+.form__title {
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.form__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__item > * {
+  align-self: center;
+}
+
+.form__label {
+  font-weight: 600;
+  padding: 10px 0;
+  margin-right:24vw;
+}
+
+.form__input {
+  -webkit-appearance: none;
+
+  width: 100%;
+  max-width: 425px;
+
+  /*Fix for Safari/iOS date fields */
+  min-height: calc(0.9em + (0.8em * 2) + 0.6em);
+
+  padding: 0.8em;
+  font-size: 0.9em;
+  font-family: "Source Sans Pro", sans-serif;
+
+  outline: none;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  background: #c6c1c1;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.form__input:focus {
+  background: #ffffff;
+}
+
+.form__input::placeholder {
+  color: #4f4d4d;
+}
+
+.form__input--error {
+  color: #d50000;
+  background: #fff8f8;
+  border-color: #d50000;
+}
+
+.form__input--error::placeholder {
+  color: #ffbfbf;
+}
+
+.form__error {
+  padding-top: 10px;
+  color: #d50000;
+  font-size: 0.9em;
+ 
+}
+
+.form__input--error + .form__error {
+  visibility: visible;
+}
+
+.form__input--small {
+  max-width: 250px;
+}
+
+textarea.form__input {
+  resize: none;
+  min-height: 200px;
+}
+
+.form__btn {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
+  font-size: 1.1em;
+  padding: 10px 16px;
+  margin: 10px 0;
+
+  color: #ffffff;
+  background: #14b64a;
+  border: 2px solid #0fa942;
+  border-radius: 5px;
+
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  width:30%;
+  margin-top:2.5%;
+  
+}
+
+.form__btn:active {
+  background: #0fa942;
+} 
+
+.container-title {
+
+    text-align: center;
+}
+
+input {
+
+    position: relative;
+    width: 30%;
+    height: 5vh;
+}
+
+form {
+    
+    margin-top:15vh;
+}
+
+.info-texts-resetorsignup {
+
+    text-align: center;
+    margin-top:1.5vh;
+    color:#344a5e;
+    
+}
+
+.info-texts-resetorsignup > p {
+
+    margin-right:13.5vw;
+}
+
+p:first-child {
+
+    margin-right:16.5vw;
+}
+
+a {
+
+    text-decoration: none;
+    margin-top:4vh;
+    color:#22313f;
+    color:#344a5e;
+    
+}
+
+.first-child-info {
+
+    margin-right:2vw;
+}
+
+.info-texts-resetorsignup {
+
+text-align: center;
+margin-top:1.5vh;
+color:#344a5e;
+
+}
+{% if fromEmailLink %}
+
+#hospital-info {
+  text-align: justify;
+  margin-left: 34.5vw;
+  margin-top:3vw;
+
+}
+
+#header-form {
+
+  text-align:justify;
+  margin-left:34.3vw;
+  margin-bottom:2vh;
+}
+
+option {
+  font-size: 1.7rem;
+}
+
+{% endif %}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<form class="form" method="POST" novalidate>
+    {% csrf_token %}
+    <div class="container-title">
+        <div id="header-form" class="form__title">{{header}}</div>
+        {% if fromEmailLink %}
+        <p id="hospital-info" style="color:gray;">
+         <strong>Hospital: {{hospital.name}}
+          <br>
+          Address: {{hospital.street}} {{hospital.city}}, {{hospital.state}} {{hospital.zip}}
+          <br>
+          Total Physicians: {{hospital.total_physicians}}</strong> 
+        </p> 
+        {% endif %}
+        {% if reset_text %}
+          <p>{{reset_text}}</p>
+        {% endif %}
+    </div>
+    <div class="container-body">
+        {% for field in form %}
+        <div class="form__item">
+        <label for="givennames" class="form__label">{{field.label}}</label>
+        {{field}}
+        {% if form.errors %}
+        <span class="form__error">{{field.errors}}</span>
+        {% endif %}
+        </div>
+        {% endfor %}
+        
+        {% if fromEmailLink %}
+        <select name="app_butt" id="approvalbox" style="width:25vw;margin-left:35.5vw;margin-top:5vh;font-size:1.7rem;">
+          <option value="" selected>Please Approve/Unapprove</option>
+          <option value="approve-{{hospital.id}}"> Approve</option>
+          <option value="unapprove-{{hospital.id}}"> Unapprove</option>
+        </select>
+        {% endif %}
+       
+        <div class="form__item">
+            <button class="form__btn" type="submit">{{button}}</button>
+        </div>
+        <div class="info-texts-resetorsignup">
+            {% if not reset_text and not fromEmailLink %}
+            <a style="color:#344a5e;" class="first-child-info" href="{% url 'login:forgot_password' %}"><strong> Forgot Your Password? </strong></a>
+            <a style="color:#344a5e;" href="{% url 'medical:register' %}"> <strong> New Facility Registration? </strong></a>
+            {% endif %}
+        </div>
+    </div>
+  </form>
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+
+
+<link rel="stylesheet" href="{% static 'pproducts/addphysician.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+body {
+    overflow-y: scroll;
+}
+
+button {
+    border-radius: 10px;
+    background-color: #14b64a;
+    color:azure;
+}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+<h3>Pulling from WooCommerce Still In Progress(Preview)</h3>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    <button name="from-woo-pull-type" type="submit" value="tags">Get Tags</button>
+    <button name="from-woo-pull-type" type="submit" value="products">Get Products</button>
+    <button name="from-woo-pull-type" type="submit" value="categories">Get Physicians</button>
+</form>
+
+{% if flag %}
+
+<h3 style="text-align:center;">{{label}}s</h3>
+{% for data in woodata %}
+
+<p style="border-bottom: 1px dashed rgb(69, 70, 71);margin-top: 2vh;">
+    <strong>{{forloop.counter}}. ID:</strong>{{data.id}} 
+    <br>
+    <strong style="margin-left:1.2vw;">{{label}} Name:</strong>{{data.name}}
+    <br>
+</p>
+
+
+{% endfor %}
+
+
+{% endif %}
+
+
+{% endblock %}

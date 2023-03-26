@@ -1,0 +1,55 @@
+<!-- --------------------------------------------------------DESCRIPTION-------------------------------------------------------------------------------- -->
+<!--  Adding Physician  -->
+<!-- --------------------------------------------------------DESCRIPTION-------------------------------------------------------------------------------- -->
+
+
+<!-- Base template w/ including header and footer is located in DjangoProject/register/templates/register/base.html 
+Every HTML file will INHERIT from this base template. HTML and BODY HEAD tags are built from the base template.-->	
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+
+<!-- BEGIN HTML BLOCK -->
+{% block content %}
+
+ <!-- Start Login -->
+
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+            <h1>Add a Physician</h1>
+            {% if anonymousRegister %}
+            <p>Already have an account? <a href="login.html">Sign In</a></p>
+            {% endif %}
+            <div class="hospital_icon">
+                <img src="/media/shoprecovery/hospital.png" alt="Image Not Available">
+            </div>
+        </div>
+    </div>
+</div>
+	
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto">
+        <!-- HTML for non-field errors is located in DjangoProject/register/templates/register/non_field_errors.html   -->
+        {% include 'register/non_field_errors.html' %}
+            <div class="login_wrap">
+                <form enctype="multipart/form-data" class="py-4 needs-validation" method="POST" novalidate>
+                    {% csrf_token %}
+                    <!-- HTML for register form is located at DjangoProject/register/templates/register/register_form.html  -->
+                    {% include 'register/register_form.html' %}
+                </form> 
+            </div>
+        </div>
+	</div>
+</div>
+
+<!-- Footer is located in DjangoProject/register/templates/register/footer.html -->	
+
+{% endblock %}
+
+
+

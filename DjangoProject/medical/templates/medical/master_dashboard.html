@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name='copyright' content=''>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Title Tag  -->
+    <title>Dashboard Master User</title>
+ 
+	<!-- Web Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/9ddbcb7f65.js" crossorigin="anonymous"></script>
+   
+	 <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/niceselect.css"> 
+	
+	<!-- custom StyleSheet -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+<!-- Start Responsive top Menus -->	
+ <script type="text/javascript">
+
+	function darken_screen(yesno){
+		if( yesno == true ){
+			document.querySelector('.screen-darken').classList.add('active');
+		}
+		else if(yesno == false){
+			document.querySelector('.screen-darken').classList.remove('active');
+		}
+	}
+	
+	function close_offcanvas(){
+		darken_screen(false);
+		document.querySelector('.mobile-offcanvas.show').classList.remove('show');
+		document.body.classList.remove('offcanvas-active');
+	}
+
+	function show_offcanvas(offcanvas_id){
+		darken_screen(true);
+		document.getElementById(offcanvas_id).classList.add('show');
+		document.body.classList.add('offcanvas-active');
+	}
+
+	document.addEventListener("DOMContentLoaded", function(){
+		document.querySelectorAll('[data-trigger]').forEach(function(everyelement){
+			
+			let offcanvas_id = everyelement.getAttribute('data-trigger');
+			
+			everyelement.addEventListener('click', function (e) {
+				e.preventDefault();
+	        	show_offcanvas(offcanvas_id);
+	  			
+			});
+		});
+
+		document.querySelectorAll('.btn-close').forEach(function(everybutton){
+			
+			everybutton.addEventListener('click', function (e) {
+				e.preventDefault();
+	        	close_offcanvas();
+	  		});
+		});
+
+		document.querySelector('.screen-darken').addEventListener('click', function(event){
+			close_offcanvas();
+		});
+		
+    }); 
+	// DOMContentLoaded  end
+</script>
+
+<!-- End Responsive top Menus -->	 	
+	 
+	
+</head>
+<body>
+	
+ 
+	
+	<!-- Header -->
+	<header class="header shop">
+		 
+	 
+		<!-- Header Inner -->
+		<div class="header-inner">
+			<div class="container">
+				<div class="cat-nav-head">
+					<div class="row">
+						<div class="col-12">
+		<div class="logo">RECOVERY SHOP - ONBOARDING  |</div>	
+		<span class="screen-darken"></span>		
+		 <button data-trigger="navbar_main" class="d-lg-none btn" type="button">  <i class="fa-solid fa-bars pr-2"></i> </button>
+	
+				<!-- ============= COMPONENT ============== -->
+<nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg  navbar-light">
+ <div class="container-fluid px-0">
+    <div class="offcanvas-header float-right">  
+		<button class="btn-close float-end"><i class="fa-solid fa-circle-xmark"></i></button>
+	</div>
+     
+	
+<div class="container text-center">
+	<ul class="navbar-nav bt-1">
+		<li class="nav-item"><a class="nav-link" href="dashboard.html"> Dashboard</a></li> 
+		<li class="nav-item"><a class="nav-link" href="physicians.html"> Physicians</a></li> 
+		<li class="nav-item"><a class="nav-link" href="products.html"> Products</a></li> 
+		<li class="nav-item"><a class="nav-link" href="contactus.html"> Support </a></li>
+	
+		<ul class="navbar-nav">
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">   Onboarding</a>
+		    <ul class="dropdown-menu">
+			  <li><a class="dropdown-item" href="invite_hospital.html"> Invite Hospital</a></li>
+			  <li><a class="dropdown-item" href="invite_physician.html"> Invite Physicians </a></li>		  
+		    </ul>
+		</li>		 
+	</ul>
+		
+	
+		</li>   	 
+	</ul>
+	
+	<ul class="navbar-nav bt-1">
+		<li class="nav-item"><span>Welcome, Wajahat (Admin)</span></li>
+		<li class="nav-item separate_li">/</li>
+		<li class="nav-item"><a class="nav-link" href="logout.html"> SignOut </a></li> 
+	</ul>
+	
+	</div>
+
+ </div> <!-- container-fluid.// -->
+</nav>
+<!-- ============= COMPONENT END// ============== -->
+						
+					
+							 
+						</div>
+					 
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/ End Header Inner -->
+	</header>
+	<!--/ End Header -->
+	 
+	  
+ <!-- Start Onboarding Statistics -->
+	
+	 <div class="container">
+	 <div class="row">
+	 
+	 <div class="col-12 pt-5 pb-3 body_content_wrapper">  
+	 <h2>Onboarding Statistics</h2>  
+	 </div>
+	 </div>
+	 
+	 <div class="row">
+	 <div class="col-md-2 col-sm hac"><div class="c1 widget"> Hospitals Added <div class="digits">5</div><a href="hospitals_list.html">View All</a></div></div>
+	 <div class="col-md-2 col-sm hac"><div class="c2 widget"> Physicians Added <div class="digits">55</div><a href="physicians_list.html">View All</a></div></div>
+	 <div class="col-md-2 col-sm hac"><div class="c3 widget"> Products Added <div class="digits">105</div><a href="products_list.html">View All</a></div></div>
+	 <div class="col col-sm hac"><div class="c4 widget"> <div class="digits_onboard"><a href="invite_hospital.html"> <i class="fa-solid fa-hospital"></i> Invite Hospital</a></div>   </div></div>
+	  <div class="col col-sm hac"><div class="c5 widget"> <div class="digits_onboard"><a href="invite_physician.html"> <i class="fa-solid fa-user-doctor"></i> Invite Physician</a></div>  </div></div>
+ 
+	 </div>
+	  
+	 
+	 </div>
+<!-- End Onboarding Statistics -->	
+	
+	 <div class="container mt-2">
+	 <div class="row">
+	 
+	 <div class="col-lg-9 col-md-12 col-12 pb-4"> 
+	 
+	 
+	 <form class="py-4 body_content_wrapper sm_res">
+ 
+   	<div class="col-12 pl-0">  
+ 
+ <!-- Start Recent Physicians List -->
+<div class="row">
+<div class="col-md-7">
+ 
+ <h2 class="w-100">Recent Physicians List <a href="physicians_list.html">View All Physicians</a></h2>  </div>	
+	
+<div class="col-md-5">
+	 <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search Physician">
+            <div class="input-group-btn">
+                <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+		
+ </div>	
+
+
+ </div>	
+ 
+<div class="table-responsive mb-4">
+
+  <table class="table table-bordered my-3 table-sm table-hover">
+  <thead>
+   <tr class="align-text-top"><th>Physician Name</th>
+ <th>Specialities</th>
+ <th>Body Parts</th>
+ <th class="text-center">Recommended Products</th>
+<th>Hospital</th> 
+  <th>Listed Date</th>
+ <th>Edit</th> </tr>
+  </thead>
+  <tbody>
+   <tr>
+   <td><a href="#">Dr. Alberto Carli, MD</a></td>
+   <td>Hip and Knee Replacement</td>
+   <td>Knee , Hip</td>
+   <td class="text-center"><a href="#">View All</a></td>
+   <td>HSS Hip & Knee</td>
+   <td>09/09/2020</td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   </tr>
+   
+   <tr>
+   <td><a href="#">Dr. Andrew Braziel</a></td>
+   <td>Hip and Knee Replacement</td>
+   <td>Knee , Hip , Leg</td>
+   <td class="text-center"><a href="#">View All</a></td>
+   <td>BSSC</td>
+   <td>02/03/2021</td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   </tr>
+   
+   <tr>
+   <td><a href="#">Dr. Alexander S. McLawhorn, MD, MBA</a></td>
+   <td>Hip and Knee Replacement</td>
+   <td>Knee , Hip</td>
+   <td class="text-center"><a href="#">View All</a></td>
+   <td>HSS Hip & Knee</td>
+   <td>12/08/2022</td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   </tr>
+   
+   <tr>
+   <td><a href="#">Dr. Thomas J. Gill, MD</a></td>
+   <td>Hip & Knee / Shoulder / Regenerative</td>
+   <td>Hip , Knee / Shoulder , Regenerative</td>
+   <td class="text-center"><a href="#">View All</a></td>
+   <td>Boston Sports Medicine</td>
+   <td>01/01/2023</td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   </tr> 
+   
+   <tr>
+   <td><a href="#">Dr. Andrew Braziel</a></td>
+   <td>Hip and Knee Replacement</td>
+   <td>Knee , Hip , Leg</td>
+   <td class="text-center"><a href="#">View All</a></td>
+   <td>BSSC</td>
+   <td>02/03/2021</td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   </tr>
+  </tbody>
+</table> 
+</div>	 
+	 </form>  
+
+<!-- End Recent Physicians List -->
+
+
+<!-- Start Hospital List -->
+ <form class="py-4 body_content_wrapper sm_res">
+
+<div class="row">
+<div class="col-md-7">
+ 
+ <h2 class="w-100">Recent Hospital List  <a href="hospitals_list.html">View All Hospitals</a></h2>  </div>	
+	
+<div class="col-md-5">
+	 <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search Hospitals">
+            <div class="input-group-btn">
+                <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+		
+ </div>	
+
+
+ </div>	
+ 
+<div class="table-responsive mb-4">
+
+	<table class="table table-bordered my-3 table-sm table-hover">
+  <thead>
+   <tr class="align-text-top"><th>Hospital Name</th>
+ <th>Address</th>
+ <th>Tax ID</th>
+ <th>Creator Name</th>
+<th class="text-center">Total Physicians</th> 
+  <th>Website</th>
+ <th>Edit</th> 
+ <th>Remove</th> </tr>
+  </thead>
+  <tbody>
+   <tr>
+   <td><a href="#">Boston Sports Medicine</a></td>
+   <td>840 Winter Street Waltham, MA 02451</td>
+   <td>G345341</td>
+   <td>Lilly Mehao</td>
+   <td class="text-center">12</td>
+   <td>www.bostonsportsmed.com</td> 
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-trash-can"></i></a></td>
+   </tr>
+   <tr>
+   <td><a href="#">North Atlantic Surgical Suites</a></td>
+   <td>23 Keewaydin Dr #100, Salem, NH 03079, United States</td>
+   <td>G32343541</td>
+   <td>Christian</td>
+   <td class="text-center">1</td>
+   <td>www.northatlanticss.com</td> 
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-trash-can"></i></a></td>
+   </tr>
+   <tr>
+   <td><a href="#">Orthopedic Specialist of Mass</a></td>
+   <td>825 Washington Street, Suite #260,Norwood, MA 02062</td>
+   <td>G345324341</td>
+   <td>Marcus</td>
+   <td class="text-center">2</td>
+   <td>www.orthomass.com</td> 
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-trash-can"></i></a></td>
+   </tr>
+   <tr>
+   <td><a href="#">HSS Hip & Knee</a></td>
+   <td>535 East 70th StreetNew York, NY 10021</td>
+   <td>G3443241</td>
+   <td>Stephan</td>
+   <td class="text-center">23</td>
+   <td>www.hss.edu</td> 
+   <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+   <td class="text-center"><a href="#"><i class="fa-solid fa-trash-can"></i></a></td>
+   </tr>
+    
+  </tbody>
+</table> 
+</div>		 
+ </form> 
+<!-- End Hospital List -->	 
+	 </div>
+	
+	 
+	 
+	 </div>
+
+<!-- Start right side column -->
+
+	 <div class="col-lg-3 col-md-12 col-12 mt-2"> 
+
+	<!-- Start Activity LOGS -->	
+	<div class="activity_logs">
+	 <h2>Latest Activity LOGS</h2>
+	 <ul>
+	 <li><div class="log_subject">Wajahat (Administrator)</div><div class="log_action">Added <a href="#">BSSC</a> 09/09/2020</div></li>
+	 <li><div class="log_subject">COSM (Hospital)</div><div class="log_action">Added <a href="#">Dr. Paul E. Kovatis MD</a>(Physician)
+ 09/09/2020</div></li>
+	 <li><div class="log_subject">COSM (Hospital)</div><div class="log_action">Edit Dr. Paul E. Kovatis MD <a href="#">Hip & Knee
+Replacements  (Specialty)</a> 09/09/2020</div></li>
+	 <li><div class="log_subject">John Doe (User)</div><div class="log_action">Added <a href="#">BSSC (Hospital)</a> 09/09/2020</div></li>
+	 <li><div class="log_subject">Mike (Administrator)</div><div class="log_action">Removed<a href="#">Dr.Robert Patz</a> (Physician / Orthopedic
+Specialist of Mass.) 09/09/2020</div></li>
+	 
+	 </ul>
+	 
+	 <a href="activity_logs.html" class="activity_logs_btn">View All Activity LOGS</a>
+	 
+	 </div>
+
+	<!-- End Activity LOGS -->	 
+	
+	
+	
+	
+	<!-- Start Product Uploads Section -->	
+	<div class="upload_products">
+	<h2>Admin Feature</h2>
+<form name="upload_products">	
+	<p><strong>Please upload updated Products</strong></p>
+	 <i class="fa-solid fa-cloud-arrow-up"></i>
+	 <div class="my-3"><input class="form-control" type="file" id="formFile"></div>
+	<p>File Format: CSV</p>
+	 <button href="activity_logs.html" class="upload_products_btn">Upload Product</button>
+	 
+	 
+</form>	 
+	 </div>
+
+	<!-- End Product Uploads Section -->	 
+	
+	
+	
+	
+	  </div>
+
+<!-- End right side column -->
+	 
+	 </div>
+	 
+	 </div>
+	
+ 
+	<!-- Start Footer -->
+ 
+
+<footer class="footer">
+
+<div class="copyright">
+			<div class="container">
+				<div class="inner">
+					<div class="row">
+						<div class="col-12">
+							<div class="left">
+								<p>©2023 The Recovery Shop – (Patent Pending) ALL RIGHTS RESERVED</p>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+</div>
+
+<!-- End Footer -->	
+	 
+
+	
+
+	<!-- Jquery -->
+    <script src="js/jquery.min.js"></script>  
+ 	<!-- Popper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="js/bootstrap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
+
+ <!-- Popover JS -->
+	 <script src="js/bootstrap-popover-x.js" type="text/javascript"></script>
+  
+
+</body>
+</html>

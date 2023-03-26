@@ -1,0 +1,153 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Edit View for Hospital Details --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+<!-- BEGIN HTML BLOCK -->
+{% block content %}
+	 
+	 
+ 
+ <!-- Start Login -->
+
+	
+<div class="container login_signup_wrap">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+			<h1>Please Edit Your Hospital Account Details</h1> 
+		</div>
+	</div>
+</div>
+
+
+<div class="container login_signup_wrap">
+	<div class="row">
+
+		<div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+
+			<div class="login_wrap">
+				<form class="needs-validation" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-group has_input_icon col-12">
+						<img src="{{pictureURL}}" class="hospital_picture">
+					</div>
+
+					{% for field in form %}
+
+					{% if field.name == 'picture' %}
+						<div class="form-group has_input_icon col-12">
+							<label>Please Change Hospital Picture</label>
+							{{field}} 
+						</div>
+					{% else %}
+						<div class="form-group has_input_icon col-12 col-md-6 ">
+							<label>{{field.label}}</label>
+							{{field}}
+						</div>
+					{% endif %}
+
+						{% if field.errors %}
+							{% for error in field.errors %}
+								<span style="color:red">{{error}}</span>
+							{% endfor %}
+						{% endif %}
+					{% endfor %}
+
+
+
+
+					{% comment %}
+					<div class="form-group has_input_icon col-12">
+					<img src="images/bsm.png" class="hospital_picture">
+					</div>
+
+
+					<div class="form-group has_input_icon col-12">
+					<label>Please Change Hospital Picture</label>
+					<input class="form-control" type="file" id="formFile"> 
+					</div>
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Hospital Name</label>
+					<input type="text" name="Hospital Name" value="Boston Sports Medicine" class="form-control">
+					</div> 
+
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Creator Name</label>
+					<input type="text" name="Creator Name" value="Stephan" class="form-control">
+					</div> 
+
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Email Address</label>
+					<input type="text" name="Email Address" value="stephan@mail.com" class="form-control">
+					</div> 
+
+
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Phone Number</label>
+					<input type="text" name="Phone Number" value="+1-202-555-0106" class="form-control">
+					</div> 
+
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Tax ID</label>
+					<input type="text" name="Tax ID" value="G3443241" class="form-control">
+					</div> 
+
+					<div class="form-group has_input_icon col-md-6 col-12">
+					<label>Bank Account#</label>
+					<input type="text" value="GB14BARC20038098691859" class="form-control">
+					</div>
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Routing</label>
+					<input type="text" name="Routing" value="211472977" class="form-control">
+					</div> 
+
+
+					<div class="form-group has_input_icon col-md-6 col-12">
+					<label>Hospital Website</label>
+					<input type="text" value="www.bostonsportsmed.com" class="form-control">
+					</div>
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+					<label>Total Physicians</label>
+					<input type="text" name="Total Physicians" value="15" class="form-control">
+					</div>
+					{% endcomment %}
+
+					<div class="form-group has_input_icon col-12 col-md-6 ">
+						<button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Update Hospital Details</button>
+					</div>
+
+				</form>  
+			</div>
+		</div>
+	</div>
+</div>
+	
+{% endblock %} 
+		
+	 
+	
+	 
+	
+	 
+	<!-- Start Footer -->
+ 
+
+
+	 
+
+	
+	 
+	
+	 
+ 

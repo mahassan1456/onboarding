@@ -1,0 +1,96 @@
+{% extends 'medical/base.html' %}
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'medical/createuser.css' %}" type="text/css">
+
+{% endblock styles %}
+
+{% block content %}
+
+
+
+<div id="parent-container">
+
+    <form action="" method="post" novalidate>
+
+        {% csrf_token %}
+
+        <div id="header-form-container">
+
+            <div class="header-form" id="header-form-single">
+                {% block header %}
+                <h1 id="header-form-text">Add New Hospital</h1>
+                {% endblock header %}
+
+            </div>
+
+        </div>
+
+        <div id="form-body-container">
+
+        {% if messages %}
+
+        <ul class="messages">
+
+            {% for message in messages %}
+                <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+        {% block forms %}
+
+            {% for field in form %}
+
+            <div id="form-body">
+
+                {{field.errors}}
+
+                <div class="form-elements">
+
+                    {{field.label}}
+
+                </div>
+
+                <div class="form-elements">
+
+                    {{field}}
+
+                </div>
+
+            {% endfor %}
+
+        {% endblock forms %}
+
+                <input type="submit" class="form-elements" value="submit">
+
+            </div>
+
+        </div>
+        
+        <div id="form-footer-container">
+
+            <div id="form-footer">
+
+                <div id="form-footer-text">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+
+
+{% endblock %}

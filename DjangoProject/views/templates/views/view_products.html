@@ -1,0 +1,101 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load views_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res" method="POST">
+              {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        {% include 'views/components/prod_table.html' %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Modal -->
+
+
+{% include 'dashboard/components/pop_up_action.html' %}
+{% comment %}
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+<script src="{% static 'views/js/functions.js' %}">
+</script>
+<script>
+    function getProducts(event) {
+    var value = event.target.value
+    var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    callbackURL = '/views/product/list/'
+    json_obj = {'specialty':value}
+    $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrf_token },
+            dataType: "json",
+            data: json_obj,
+            url: callbackURL,
+            // Receiving JSON Response Back from DB
+            success: function(response) {
+                console.log(response)
+
+                if (response.dataset) {
+                }
+                // Write Javascript function here
+            },
+            error: function() {
+            console.log('error')
+            }
+        })
+
+}
+
+function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var URL = `${event.target.getAttribute("data-label")}?datatype=products`
+        var specialty_tag = document.getElementById('selected_specialty').value
+        var url = "{% url 'support:downloadXLS' %}" + "?datatype=products" + `&selected_specialty=${specialty_tag}`
+     
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "physicians.xlsx"
+            a.click()
+        })
+    }
+</script>
+{% endblock %}

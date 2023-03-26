@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Madurai&display=swap'); 
+
+
+.grid-container {
+    display:grid;
+    grid-template-columns: 33.3% 33.3% 33.3;
+    position: relative;
+    top:50px;
+    font-size: large;
+    font-family: 'Hind Madurai', sans-serif;
+    font-family: 'Cabin', sans-serif;
+    }
+
+    .gccl {
+    
+    }
+
+    .gccm {
+    
+    }
+
+    .flex-container {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    
+    
+    }
+
+    .form-title {
+
+    padding-top: 10px;
+
+    }
+
+    label {
+    
+    line-height: 50px;
+    }
+
+    .input-fam  {
+    
+    }
+    .inner-flex {
+    
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    
+    
+    }
+    .inner-flex > label {
+
+    color:#22313f;
+    font-size: 21px;
+    }
+
+    label {
+    margin-left:21%;
+    line-height: 50px;
+    }
+
+    input {
+    position:relative;
+    border:3px outset #8c949c;
+    border-radius:7px;
+    width:40%;
+    height:42px;
+    font-size:17px;
+    margin-right:100px;
+    border: 3px outset #7a828b;
+    border: 3px outset #a2b0c0;
+    
+    
+
+    }
+
+    textarea {
+
+        margin-right: 8%;
+        border-radius: 6px;
+        border:3px outset #8c949c;
+        
+
+    }
+
+    select {
+        position:relative;
+        height:31px;
+        width:30%;
+        margin-right: 170px;
+        height:31px;
+        border-radius: 5px;
+        margin-top:1.4%;
+    }
+
+    h1 {
+    text-align:center;
+    }
+
+    .input-fam {
+    
+    }
+
+    .error {
+    text-align:center;
+    }
+
+    .form-title {
+    text-align:center;
+    font-size: 30px;
+    }
+
+    .errorlist{
+    text-align:center;
+    list-style:none;
+    color:red;
+    font-family: 'Arial';
+    margin-bottom:10px;
+    margin-top:5px;
+    }
+
+    .subbutt {
+  
+    width:25%;
+    margin: 10px auto;
+    display: block;
+    
+    }
+

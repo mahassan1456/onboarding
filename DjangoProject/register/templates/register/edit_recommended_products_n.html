@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name='copyright' content=''>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Title Tag  -->
+    <title>HEALTH CARE SOLUTIONS</title>
+ 
+	<!-- Web Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"> 
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/9ddbcb7f65.js" crossorigin="anonymous"></script>
+   
+	 <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="css/niceselect.css"> 
+	
+	<!-- custom StyleSheet -->
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+<!-- Start Responsive top Menus -->	
+ <script type="text/javascript">
+
+	function darken_screen(yesno){
+		if( yesno == true ){
+			document.querySelector('.screen-darken').classList.add('active');
+		}
+		else if(yesno == false){
+			document.querySelector('.screen-darken').classList.remove('active');
+		}
+	}
+	
+	function close_offcanvas(){
+		darken_screen(false);
+		document.querySelector('.mobile-offcanvas.show').classList.remove('show');
+		document.body.classList.remove('offcanvas-active');
+	}
+
+	function show_offcanvas(offcanvas_id){
+		darken_screen(true);
+		document.getElementById(offcanvas_id).classList.add('show');
+		document.body.classList.add('offcanvas-active');
+	}
+
+	document.addEventListener("DOMContentLoaded", function(){
+		document.querySelectorAll('[data-trigger]').forEach(function(everyelement){
+			
+			let offcanvas_id = everyelement.getAttribute('data-trigger');
+			
+			everyelement.addEventListener('click', function (e) {
+				e.preventDefault();
+	        	show_offcanvas(offcanvas_id);
+	  			
+			});
+		});
+
+		document.querySelectorAll('.btn-close').forEach(function(everybutton){
+			
+			everybutton.addEventListener('click', function (e) {
+				e.preventDefault();
+	        	close_offcanvas();
+	  		});
+		});
+
+		document.querySelector('.screen-darken').addEventListener('click', function(event){
+			close_offcanvas();
+		});
+		
+    }); 
+	// DOMContentLoaded  end
+</script>
+
+<!-- End Responsive top Menus -->	 	
+	 
+	
+</head>
+<body>
+	
+ 
+	<!-- Header -->
+	<header class="header shop">
+		 
+	 
+		<!-- Header Inner -->
+		<div class="header-inner">
+			<div class="container">
+				<div class="cat-nav-head">
+					<div class="row">
+						<div class="col-12">
+		<div class="logo">RECOVERY SHOP - ONBOARDING  |</div>	
+		<span class="screen-darken"></span>		
+		 <button data-trigger="navbar_main" class="d-lg-none btn" type="button">  <i class="fa-solid fa-bars pr-2"></i> </button>
+	
+				<!-- ============= COMPONENT ============== -->
+<nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg  navbar-light">
+ <div class="container-fluid px-0">
+    <div class="offcanvas-header float-right">  
+		<button class="btn-close float-end"><i class="fa-solid fa-circle-xmark"></i></button>
+	</div>
+     
+	
+<div class="container text-center">
+	<ul class="navbar-nav bt-1">
+		<li class="nav-item"><a class="nav-link" href="dashboard_master_user.html"> Dashboard</a></li> 
+		<li class="nav-item"><a class="nav-link" href="hospital_list_master_user.html"> Hospitals</a></li> 
+		<li class="nav-item nav_item_active"><a class="nav-link" href="physician_list_masteruser.html"> Physicians</a></li> 
+		<li class="nav-item"><a class="nav-link" href="products.html"> Products</a></li> 
+		<li class="nav-item"><a class="nav-link" href="contactus.html"> Support </a></li>
+	
+		<ul class="navbar-nav">
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">   Onboarding</a>
+		    <ul class="dropdown-menu">
+			  <li><a class="dropdown-item" href="invite_hospital.html"> Invite Hospital</a></li>
+			  <li><a class="dropdown-item" href="invite_physician.html"> Invite Physicians </a></li>		  
+		    </ul>
+		</li>		 
+	</ul>
+		
+	
+		</li>   	 
+	</ul>
+	
+	<ul class="navbar-nav bt-1">
+		<li class="nav-item"><span>Welcome, Wajahat</span></li>
+		<li class="nav-item separate_li">/</li>
+		<li class="nav-item"><a class="nav-link" href="logout.html"> SignOut </a></li> 
+	</ul>
+	
+	</div>
+
+ </div> <!-- container-fluid.// -->
+</nav>
+<!-- ============= COMPONENT END// ============== -->
+						
+					
+							 
+						</div>
+					 
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/ End Header Inner -->
+	</header>
+	<!--/ End Header -->
+	 
+ 
+ <!-- Start Recommended Products Section -->
+	
+	 <div class="container login_signup_wrap">
+	 <div class="row">
+	 
+	 <div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+	 
+	 <h4>Welcome Carlie {Physician Name} BSSC {Hospital Name}</h4>
+	 <h5>Please Select Your Recommended Products</h5>
+
+	 </div>
+	 </div>
+	 </div>
+	
+	
+	 <div class="container login_signup_wrap">
+	 <div class="row">
+	 
+	 <div class="col-md-12 col-12 mx-auto"> 
+	 
+	 <div class="login_wrap">
+	 <form class="py-4 needs-validation">
+	 
+
+
+ 
+
+ 	
+  	<div class="form-group has_input_icon col-md-12 col-lg-6 col-12">
+    <label>Body Parts <button type="submit" class="clear_btn"><i class="fa-solid fa-xmark"></i>Clear</button></label> 
+   
+  <div class="container recommend_products_wrapper">
+   <div class="col-md-12">
+      <div class="widget-content">
+	   <ul class="listing">
+                  <li><label>Knee <input type="checkbox" checked></label></li>
+                  <li><label>Hip <input type="checkbox" checked></label></li>
+                  <li><label>Arm <input type="checkbox"></label></li>
+                  <li><label>Shoulder <input type="checkbox"></label></li>
+                  <li><label>Elbow <input type="checkbox"></label></li>
+                  <li><label>Foot / Ankle <input type="checkbox"></label></li>
+                  <li><label>Hamstring <input type="checkbox"></label></li>
+                  <li><label>Hand / Wrist <input type="checkbox"></label></li>
+                  <li><label>Leg <input type="checkbox"></label></li>
+				  
+	  </ul>
+	  
+   
+  </div>
+</div>
+</div>
+
+</div>	 
+
+
+
+
+
+	<div class="form-group has_input_icon col-md-12 col-lg-6 col-12">
+	 <label>Recommended Products</label>
+  
+  
+  
+  <div class="container recommend_products_wrapper">
+   <div class="col-md-12">
+      <div class="widget-content">
+         <ul id="accordion">
+            <li>
+               <h4>Knee <span class="plusminus">+</span></h4>
+               <ul class="listing">
+                  <li><a href="#" class="rc_product_img"><img src="images/nice_package-1.jpg"></a><label>NICE1: Cold + Compression Therapy  System <input type="checkbox" checked></label><a href="#"  data-toggle="modal" data-target="#product_detail" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/ADL4.jpg"></a><label>ADL Kit <input type="checkbox" checked></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/bottle-sizes-min.png"></a><label>BioCorneum Scar Cream <input type="checkbox" checked></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/POLAR-CARE-WAVE-UNIT_COVER-OFF-0004_470x.jpg"></a><label>Breg Polar Wave <input type="checkbox" checked></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/61415a7a7e748a1edc6d7198_Circul8-Pro-Float.png"></a><label>Home DVT Device <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/61lkXjK0GL._AC_SX679_.jpg"></a><label>Massage Gun <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/PROCompressionGraduatedCompressionkneesleeve.jpg"></a><label>PRO Compression Knee Sleeve <input type="checkbox"></label>
+					<a href="#" class="view_details"> (View Product Detail)</a></li>
+               </ul>
+            </li>
+            <li>
+               <h4>Hip <span class="plusminus">+</span></h4>
+               <ul>
+                  <li><a href="#" class="rc_product_img"><img src="images/nice_package-1.jpg"></a><label>NICE1: Cold + Compression Therapy  System <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/ADL4.jpg"></a><label>ADL Kit <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/bottle-sizes-min.png"></a><label>BioCorneum Scar Cream <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/POLAR-CARE-WAVE-UNIT_COVER-OFF-0004_470x.jpg"></a><label>Breg Polar Wave <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/61415a7a7e748a1edc6d7198_Circul8-Pro-Float.png"></a><label>Home DVT Device <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/61lkXjK0GL._AC_SX679_.jpg"></a><label>Massage Gun <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+                  <li><a href="#" class="rc_product_img"><img src="images/PROCompressionGraduatedCompressionkneesleeve.jpg"></a><label>PRO Compression Knee Sleeve <input type="checkbox"></label><a href="#" class="view_details"> (View Product Detail)</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+</div>
+  
+  
+  
+  
+ 
+  </div> 
+
+	<div class="form-group has_input_icon col-12 col-md-12">
+	  <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Update Products</button>
+  </div> 
+
+
+  
+ 
+	 
+	 </form>  
+	 
+	 </div>
+	 
+	 </div>
+	 
+	
+	 
+	 
+	 </div>
+	 
+	 </div>
+	
+
+	
+	 
+	<!-- End Recommended Products Section -->	 
+		
+	 
+	
+	 
+	
+	 
+	<!-- Start Footer -->
+ 
+
+<footer class="footer">
+ 
+
+ 
+
+<div class="copyright">
+			<div class="container">
+				<div class="inner">
+					<div class="row">
+						<div class="col-12">
+							<div class="left">
+								<p>©2023 The Recovery Shop – (Patent Pending) ALL RIGHTS RESERVED</p>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+</div>
+
+<!-- End Footer -->	
+
+	 
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="product_detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+		
+		
+		
+ <!-- Start Recommended Products Section -->
+	
+	 <div class="container login_signup_wrap">
+	 <div class="row">
+	 
+	 <div class="col-md-4"> 
+	  
+	 <div class="product_image_large border"><img src="images/ADL4.jpg"></div>
+	 <div class="product_image_thumbnail"><a href="#"><img src="images/ADL4.jpg"></a><a href="#"><img src="images/ADL4.jpg"></a><a href="#"><img src="images/ADL4.jpg"></a><a href="#"><img src="images/ADL4.jpg"></a></div>
+
+	 </div>
+	 
+	 <div class="col-md-8 text-left"> 
+	  
+	 <h2>ADL Kit</h2>
+	 <div class="product_category"><strong>Category:</strong> <span>Shoulder Repare</span></div>
+	 <div class="product_specialties"><strong>Specialties:</strong><span> Knee</span></div>
+	 <p>The FabLife hip kit is the perfect set of accessories for those who need assistance in their day-to-day tasks.</p>
+<p>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities</p>
+
+<div class="price">$45.00</div>
+ <div class="product_manufacturer"><small><strong>Manufacturer:</strong> ADL</small></div>
+ <div class="product_sku"><small><strong>SKU:</strong> Not Available</small></div>
+ <div class="product_qty"><small><strong>Quantity:</strong> 100</small></div>
+	 </div>
+	  
+	 
+	 
+	 
+	 
+	 </div>
+	 
+ <!--Start long description -->
+ 
+ 	 <div class="row my-4">
+	 
+	 <div class="col-12 text-left"> 
+	  
+	<ul class="a-unordered_list">
+<li>The FabLife hip kit is the perfect set of accessories for those who need assistance in their day-to-day tasks.</li>
+<li>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities.</li>
+<li>A total package that is ideal for those undergoing hip, knee, and back rehabilitation.</li>
+<li>Included in the kit are a 26″ Reacher, a contoured sponge with a 17″ Handle, a formed sock aid, and an 18″ Plastic shoehorn.</li>
+<li>The kit is a terrific asset to those moving slowly and carefully pre- and <a href="#">post-surgery.</a></li>
+</ul>
+ 
+
+<h5>Product Specifications</h2>	
+
+<div class="table_wrapper">
+<table>
+<tbody>
+<tr>
+<th>Ean</th>
+<td>0714905049766</td>
+</tr>
+<tr>
+<th>Global Trade Identification Number</th>
+<td>00714905049766</td>
+</tr>
+<tr>
+<th>Height</th>
+<td>36 inches</td>
+</tr>
+<tr>
+<th>Included Components</th>
+<td>Hip Kit</td>
+</tr>
+<tr>
+<th>Length</th>
+<td>6 inches</td>
+</tr>
+<tr>
+<th>Model Number</th>
+<td>86-0074</td>
+</tr>
+<tr>
+<th>Number of Items</th>
+<td>1</td>
+</tr>
+<tr>
+<th>Part Number</th>
+<td>86-0074</td>
+</tr>
+<tr>
+<th>Size</th>
+<td>26″ Reacher, Plstc Shoehorn</td>
+</tr>
+<tr>
+<th>Style</th>
+<td>With Formed Sock Aid, Sponge</td>
+</tr>
+<tr>
+<th>UNSPSC Code</th>
+<td>42000000</td>
+</tr>
+<tr>
+<th>UPC</th>
+<td>714905049766</td>
+</tr>
+<tr>
+<th>Width</th>
+<td>6 inches</td>
+</tr>
+</tbody>
+</table> 
+</div>
+	 
+	 </div>
+ 
+ 
+ 
+	 
+	 </div>
+	
+
+ <!--End long description -->	
+	 
+		
+
+	 </div>	 
+	
+
+ <!-- End Recommended Products Section -->	 		
+		
+		
+		
+		
+		
+      </div>
+ 
+    </div>
+  </div>
+</div>
+
+
+<!-- End Modal Popup -->	 
+ 
+	<!-- Jquery -->
+    <script src="js/jquery.min.js"></script>  
+ 	<!-- Popper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="js/bootstrap.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"crossorigin="anonymous"></script>
+
+ <!-- Popover JS -->
+	 <script src="js/bootstrap-popover-x.js" type="text/javascript"></script>
+  	 
+
+ <!-- Start Accordian JS -->
+<script>
+$(document).ready(function () {
+	$("#accordion li > h4").click(function () {
+
+		if ($(this).next().is(':visible')) {
+			$(this).next().slideUp(300);
+			$(this).children(".plusminus").text('+');
+		} else {
+			$(this).next("#accordion ul").slideDown(300);
+			$(this).children(".plusminus").text('-');
+		}
+	});
+});
+
+</script>	
+ <!-- End Accordian JS -->
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!--  Confirmation/Congratulions for sending a quick invite to a hospital admin  -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+
+{% block content %}
+	 	 
+ <div class="container login_signup_wrap">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+			<div class="login_wrap">
+				<div class="alert alert-success" role="alert">
+					Congratulations
+					<p style="text-align: center;"> Your Invitation has been sent!!</p> 
+					<p style="text-align: center;"> Hospital: <strong style="color:green;"> {% if qs_physician.getHospitalName == 'Assign Hospital' %} Unassigned {% else %} {{qs_physician.getHospitalName}} {% endif %}</strong></p>
+					<p style="text-align: center;"> Name: <strong style="color:green;"> {{qs_physician.get_full_name}}</strong></p>
+					<p style="text-align: center;">Email: <strong style="color:green;">{{qs_physician.email}}</strong> </p>
+				</div>
+					{% if type == 'physician' %}
+					{% if group == 'staff' %}
+					<a href="{% url 'quickstart:qs_staff' %}" class="btn btn-secondary btn1_blue">Invite Another Physician</a>
+					<a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary btn1_blue btn1_blk">Go to Dashboard</a>
+					{% else %}
+					<a href="{% url 'quickstart:quickStartPhysician' %}" class="btn btn-secondary btn1_blue">Invite another Physician</a>
+					<a href="{% url 'dashboard:master_dashboard' %}" class="btn btn-primary btn1_blue btn1_blk">Go to Dashboard</a>
+					{% endif %}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+ 
+{% endblock %}

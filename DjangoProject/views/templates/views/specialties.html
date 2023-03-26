@@ -1,0 +1,74 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res" method="POST">
+              {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        {% include 'views/components/specialties_table.html' %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'dashboard/components/pop_up_action.html' %}
+
+<script src="{% static 'views/js/functions.js' %}">
+
+
+</script>
+<script>
+    function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var URL = `${event.target.getAttribute("data-label")}?datatype=products`
+        var selected_product = document.getElementById('selected_product').value
+        console.log(selected_product)
+        var url = '/support/downloadxls/' + '?datatype=specialty' + `&selected_product=${selected_product}`
+        // var url = '/support/downloadxls/tags/'
+        console.log(url)
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "physicians.xlsx"
+            a.click()
+        })
+    }
+</script>
+{% endblock %}

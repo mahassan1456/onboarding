@@ -1,0 +1,43 @@
+{% extends 'medical/base1.html' %}
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'medical/createuser.css' %}" type="text/css">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><script type="text/javascript" async="" src="https://www.gstatic.com/recaptcha/releases/Km9gKuG06He-isPsP6saG8cn/recaptcha__en.js" crossorigin="anonymous" integrity="sha384-tL/88+JE9Mv/pJzkZt5DBcS7efRA2LrT4YX0Htu8Rnmat69OIBwraynHJm/fWfbH"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script><script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script><title>Physician Sign Up - Formtopia is the world's fastest form builder</title><meta content="Formtopia is the fastest form builder.  Try it now for free to build surveys, signup forms, contact forms and more." name="description"><meta content="width=device-width, initial-scale=1" name="viewport"><style type="text/css">.done { text-decoration: line-through }
+    .powcloud-form-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    #powcloud-form {
+      width: 600px;
+      margin: auto;
+    }
+    
+    body {
+      background-color: #fafafa;
+    }</style></head>
+
+{% endblock styles %}
+
+{% block content %}
+
+
+<body>
+    <div class="powcloud-form-container">
+        <div id="powcloud-form">
+            <h1>Physician Sign Up</h1>
+            <p></p>
+            <script src="/formtopia/js/latest/formtopia-webcomponent.mjs" type="module"></script>
+            <formtopia-form endpoint="https://powcloud.com" key="B4H0GA1563" flavor="bootstrap"><script src="https://www.google.com/recaptcha/api.js?render=6Ld1c90bAAAAANea8pqcN4tKyBHkRqZmRuYCrNX6"></script><style>.grecaptcha-badge { visibility: hidden; }</style><form class="formtopia-form" id="formtopia-form-B4H0GA1563"><div class="formtopia-field mb-3"><label for="email" class="formtopia-label form-label">Email</label><input type="email" name="email" required="" id="email" class="formtopia-input form-control"></div><div class="formtopia-field mb-3"><label for="password" class="formtopia-label form-label">Password</label><input type="text" name="password" required="" id="password" class="formtopia-input form-control"></div><div class="formtopia-footer mb-3"><button type="submit" id="undefined" class="btn btn-primary">Submit</button></div></form><div id="formtopia-form-success-modal-B4H0GA1563" style="z-index: 3000; display: none; padding-top: 100px; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto;"><div style="margin: auto; background-color: rgb(255, 255, 255); position: relative; padding: 0px; outline: 0px; width: 350px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;"><div style="padding: 40px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 16px 0px;"><h4>Thank you!</h4><p>Your form submission has been received.</p><div style="display: flex; justify-content: center; margin-top: 20px;"><button style="background-color: rgb(93, 46, 195); color: white; padding: 10px 15px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border: none;">Close</button></div></div></div></div><formtopia-brand><div id="formtopia-brand" style="text-align:center;padding: 10px;">
+    
+    </div></formtopia-brand></formtopia-form></div></div><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993" integrity="sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==" data-cf-beacon="{&quot;rayId&quot;:&quot;7745617478900bbe&quot;,&quot;version&quot;:&quot;2022.11.3&quot;,&quot;r&quot;:1,&quot;token&quot;:&quot;ba47beb5c112456ab5891eb0b88ec993&quot;,&quot;si&quot;:100}" crossorigin="anonymous"></script>
+    <div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="https://www.google.com/recaptcha/api2/anchor?ar=1&amp;k=6Ld1c90bAAAAANea8pqcN4tKyBHkRqZmRuYCrNX6&amp;co=aHR0cHM6Ly9wb3djbG91ZC5jb206NDQz&amp;hl=en&amp;v=Km9gKuG06He-isPsP6saG8cn&amp;size=invisible&amp;cb=17cgof43o704" width="256" height="60" role="presentation" name="a-8c3m0cbimr1l" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;"></iframe></div></body>
+
+
+{% endblock %}

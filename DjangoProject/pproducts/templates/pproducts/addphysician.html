@@ -1,0 +1,96 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'pproducts/addphysician.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+.f11{
+    text-shadow: 3px 3px 4px #ebebeb;
+    
+}
+
+.form {
+  font-size:1.1rem;
+  
+}
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<form enctype="multipart/form-data" class="form" method="POST" novalidate>
+    {% csrf_token %}
+    <!-- Header Form Title -->
+    <div class="container-title">
+        <div class="form__title">{{header}}</div>
+        <p class="form__desc">
+        etur adipisicing elit. Eos, nostrum? Laudantium molestiae explicabo numquam animi corrupti debitis ratione, accusamus nemo optio eum vero nesciunt facere aperiam! Labore pariatur accusantium exercitationem.
+        </p>
+    </div>
+    
+    <!-- Form Body/Fields -->
+    {% for field in form %}
+    <!-- Account for Product_Tags field which has additional functionality -->
+  
+    {% if field.name == 'specialty_ph' %}
+    <div class="form__item tags_select" id="tags_select" style="display:block;">
+    {% else %}
+    <div class="form__item">
+    {% endif %}
+  
+      {% if field.name == 'specialty_ph' %}
+      <div>
+        <label for="givennames" class="form__label">{{field.label}}</label>
+        {% comment %}
+        <button id="specialty_button_refresh" onclick="refreshProducts2(event)" type="submit">Refresh</button>
+        {% endcomment %}
+        <button id="specialty_button_refresh" onclick="refreshProducts2(event)" value="clear" type="submit">Clear</button>
+        <label for="givennames" style="margin-left: 6.5vw;" class="form__label product-label">Products</label>
+      </div>
+      {% else %}
+      <label for="givennames" class="form__label">{{field.label}}</label>
+      {% endif %}
+      {% if field.name == 'specialty_ph' %}
+      <div class="f11">
+      <div onchange="testme(event)">
+      {{field}}
+      </div>
+      {% else %}
+      {{field}}
+      {% endif %}
+      {% if form.errors %}
+      <span class="form__error">{{field.errors}}</span>
+      {% endif %}
+  {% if field.name == 'specialty_ph' %}
+      <div name="specialty_selected" id="id_select_box8" class="x2" multiple=""></div>
+    </div>
+  {% endif %}
+  </div>
+  {% endfor %}
+ 
+    
+  <div class="form__item">
+    <button class="form__btn" type="submit" id="sbtbutton">{{button_text}}</button>
+  </div>
+  <!-- Closing Form Tag -->
+  </form>
+  
+<script src="{% static 'pproducts/functions.js' %}"></script>
+
+<script>
+
+  function testme(event) {
+    console.log("testing the function if it works properly")
+    return
+  }
+
+</script>
+
+{% endblock %}

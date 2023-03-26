@@ -1,0 +1,81 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!--  Confirmation/Congratulions for sending a quick invite to a hospital admin  -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+
+{% block content %}
+{{welcome}}
+ <div class="container login_signup_wrap">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+			<div class="login_wrap">
+				<div class="alert alert-success" role="alert">
+					{% if welcome %}
+					<p style="text-align: center;">
+						Congratulations {{qs_physician.get_full_name}} on Making Your Selections:
+					</p>
+					<p  style="text-align: justify;">
+						<br>
+						
+						Please download a summary report of your recomended products below. 
+						If you need information the next steps or you wish to update your recommended products please contact your 
+						hospital administrar or mikeb@shop-recovery.com. Thanks!
+						{% comment %}
+						{{qs_physician.buildProductsString}}
+						{% endcomment %}
+					</p>
+					<!-- PLEASE STYLE HERE -->
+					{% if welcome %}
+					<button onclick="downloadXLS(event)" data-id="{{qs_physician.id}}" class="btn btn-secondary btn1_blue"> Download Excel Summary </button>
+					{% endif %}
+					<!-- PLEASE STYLE HERE -->
+					{% else %}
+						Congratulations,
+						<p style="text-align: center;"> Your Invitation has been sent!!</p> 
+						<p style="text-align: center;"> Hospital: <strong style="color:green;"> {{qs_hospital.hospital_name}}</strong></p>
+						<p style="text-align: center;">Email: <strong style="color:green;">{{qs_hospital.email}}</strong> </p>
+					{% endif %}
+				</div>
+				{% comment %}
+				<div class="alert alert-success" role="alert">
+				Congratulations 
+					<p>Your invitation has been sent to {{qs_hospital.email}} for the Hospital {{qs_hospital.hospital_name}}</p>
+				</div> 
+				{% endcomment %}
+				{% if not welcome %}
+				<div class="col-12 col-md-8 mx-auto">
+					<a href="{% url 'views:invite_hospital_view' %}" class="btn btn-secondary btn1_blue">Invite Another Hospital</a>
+					<a href="{% url 'dashboard:master_dashboard' %}" class="btn btn-primary btn1_blue btn1_blk">Go to Dashboard</a>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div> 
+</div>
+
+<script>
+
+function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var object_id = event.target.getAttribute("data-id")
+		var url = `/quickstart/thankyou/physician/${object_id}/?download=True`
+     
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "your_physician_summary.xlsx"
+            a.click()
+        })
+    }
+</script>
+ 
+{% endblock %}

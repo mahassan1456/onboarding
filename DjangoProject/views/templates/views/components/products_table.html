@@ -1,0 +1,114 @@
+
+<div class="col-md-4">
+    <h2 class="w-100">Products {% if tag and tag.lower != 'all' %}@ {{tag.title}} {% endif %}<a href="{% url 'support:addProduct' %}">Add Product</a><a href="{% url 'support:downloadXLS' %}"><button onclick="downloadXLS(event)">Download XLSX</button></a></h2>
+</div>
+
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" class="form-control" name="searchTerms" placeholder="Search by physician, specialty, product">
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" name="button" value="search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_superuser %}
+<div class="col-md-4">
+    <div class="input-group">
+        <select id="selected_specialty" name="specialty" class="form-control" onchange="">
+            <option value="all" {% if not tag %} selected {% endif %}>All</option>
+            {% for specialty in specialty_set %}
+            <option value="{{specialty.tag}}" {% if specialty.tag.lower == tag.lower %} selected {% endif %} >{{specialty.tag}}</option>
+            {% endfor %}
+        </select>
+        <div>
+            <button type="submit" name="button" value="filter">Filter</button>
+        </div>
+    </div>
+    <!-- <div>
+        <button type="submit">Filter</button>
+    </div> -->
+</div>
+{% endif %}
+<div class="col-12 pl-0">
+    <div class="table-responsive">
+        <table class="table table-bordered my-3 table-sm table-hover">
+            <thead>
+                <tr class="align-text-top">
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Associated Specialties</th>
+                    <th>Price</th>
+                    <th>Physicians Recommending</th>
+                    <th clss="text-center">Details</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Remove</th>
+                </tr>
+            </thead>
+            <tbody id="physician_main_list">
+                {% for product in posts %}
+                <tr>
+                    <td><img src="{{product.getFirstImage}}" alt="Not Available" class="physician_sm_pic"></td>
+                    <td id="object-{{product.id}}" ><a href="{% url 'views:viewProductDetail' product.id %}">{{product.name}}</a></td>
+                    <td><a href="">{{product.short_description}}</a></td>
+                    <td>{{product.buildSpecialtiesString}}</td>
+                    <td>{{product.price}}</td>
+                    {% if request.user.is_superuser %}
+                    <td class="text-center">{{product.countPhysiciansSuper}}</td>
+                    {% else %}
+                    {% comment %}
+                    <td>{{product.countPhysicians}}</td>
+                    {% endcomment %}
+                    {% endif %}
+                    <td class="text-center"><a href="">View</a></td>
+                    <td class="text-center"><a href="{% url 'register:editProduct' product.id %}" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-action="delete" data-type="product" data-toggle="modal" data-id="{{product.id}}" data-target="#reminder" class=""><i class="fa-solid fa-trash-can"></i></a></td>
+                    {% comment %}
+                    <td class="text-center"><a onclick="assignLink(event)" data-id="{{product.id}}" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                    {% endcomment %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if posts.has_other_pages %}
+        <nav style="margin-right: 20vw;">
+          <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                  <span class="page-link" aria-hidden="true">&laquo;</span>
+              </li>
+            {% endif %}
+    
+            {% for p in posts.paginator.page_range %}
+              {% if posts.number == p %}
+                <li class="page-item"><a class="page-link" style="color: red;" href="#">{{ p }}</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+              {% endif %}
+            {% endfor %}
+    
+            {% if posts.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&raquo;</span>
+              </li>
+            {% endif %}
+        </ul>
+        </nav>
+      {% endif %}
+    </div>
+</div>
+

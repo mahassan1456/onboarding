@@ -1,0 +1,180 @@
+<div class="col-md-4">
+    <h2 class="w-100">Physicians List 
+        <a href="{% url 'support:addPhysician' %}?new=True">Add Physician</a>
+        {% if request.user.is_superuser %}
+        <a href="{% url 'views:view_physicians_qs' %}?qs=True">Recently Invited</a>
+        {% endif %}
+        <a href=""><button onclick="downloadXLS(event)">Download XLSX</button></a>
+    </h2>
+</div>
+
+{% comment %}
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search Physicians by Last_Name, Specialty, Body Parts">
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+<div class="col-md-4" {% if not request.user.is_superuser %} style="visibility: hidden;" {% endif %}>
+    <div class="input-group">
+        <input type="hidden" value="physicians" name="datatype">
+        <select name="selected_hospital" id="selection_hospital" class="form-control" onchange="getPhysicians(event)">
+            <option value="all" selected>All</option>
+            {% for hospital in hospital_set %}
+            <option value="{{hospital.id}}">{{hospital.name}}</option>
+            {% endfor %}
+            <option value="del" {% if selectionDelete %} selected {% endif %}>Deleted</option>
+        </select>
+    </div>
+    <div>
+        <button></button>
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" name="search" id="search_box" class="form-control" {% if searchTerms %} value="{{searchTerms}}" {% else %} placeholder="Search by Physician, Specialty, Body Parts" {% endif %}>
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 pl-0">
+    <div class="table-responsive">
+        <table class="table table-bordered my-3 table-sm table-hover">
+            <thead>
+                <tr class="align-text-top">
+                    <th class="text-center">Picture</th>
+                    <th>Hospital Name</th>
+                    <th>Physician Name</th>
+                    {% comment %}
+                    <th>Specialty Areas</th>
+                    {% endcomment %}
+                    <th>Body Parts</th>
+                    <th class="text-center">Recommended Products</th>
+                    <th class="text-center">Edit</th>
+                    {% if selectionDelete %}
+                    <th class="text-center" > Remove Permanently</th>
+                    <th class="text-center" id="rrestore-column">Restore</th>
+                    {% else %}
+                    <th class="text-center" id="remove_perm">Remove</th>
+                    {% endif %}
+                  
+                </tr>
+            </thead>
+            <tbody id="physician_main_list">
+                {% for physician in object_set %}
+                <tr>
+                    <td><img src="{{physician.returnPictureURL}}" class="physician_sm_pic"></td>
+                    <td>{{physician.facility.name}}</td>
+                    <td><a href="{% url 'views:physician_detail_view' physician.id %}" id="object-{{physician.id}}">{{physician.get_full_name}}</a></td>
+                    {% comment %}
+                    <td>Not Provided</td>
+                    {% endcomment %}
+                    {% if physician.specialty_ph.all %}
+                    <td>
+                      {{physician.buildSpecialtyString}}
+                    </td>
+                    {% else %}
+                    <td class="text-center"><a href=""><a href="{% url 'register:editPhysician' physician.id %}">Assign</a></td>
+                    {% endif %}
+                    <td class="text-center"><a href="{% url 'register:editPhysician' physician.id %}">{% if physician.productitems.all %} View All {% else %} Assign Products {% endif %}</a></td>
+                    <td class="text-center"><a href="{% url 'register:editPhysician' physician.id %}?showAll=true" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    {% if selectionDelete %}
+                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-type="physician" data-action="delete" data-toggle="modal" data-id="{{physician.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                    <td class="text-center restore_c" id="restore-column-value"> <a href="#" onclick="assignLink(event)" data-toggle="modal" data-name="$" data-type="physician" data-action="restore" data-id="{{physician.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                    {% else %}
+                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-type="physician" data-action="delete" data-toggle="modal" data-id="{{physician.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                    {% endif %}  
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function getPhysicians(event) {
+    var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    var hospital_id = event.target.value;
+    if (!hospital_id) {
+        return
+    }
+    var physicians_main_list = document.getElementById('physician_main_list');
+    var json_obj = {}
+    json_obj['hospital_id'] = hospital_id;
+    var callbackURL = '/views/filter/physician/listview/'
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrf_token },
+            dataType: "json",
+            data: json_obj,
+            url: callbackURL,
+            // Receiving JSON Response Back from DB
+            success: function(response) {
+                console.log(response)
+                console.log('wtf')
+                if (response.dataset) {
+                    var columnRemove = document.getElementById('remove_perm')
+                    if (response.deleted) {
+                        columnRemove.textContent = "Remove Permanently"
+                        var th = document.createElement('th')
+                        th.id = 'restore-column'
+                        th.textContent = "Restore"
+                        columnRemove.insertAdjacentElement('afterend',th)
+                        
+
+                    } else {
+                        var restore_column = document.getElementById('restore-column')
+                        if (restore_column) {
+                            var rows = document.getElementsByClassName('restore_c')
+                            rows = [...rows]
+                            rows.forEach(element => {
+                                element.remove()
+                            });
+
+                            restore_column.remove()
+                            columnRemove.textContent = 'Remove'
+
+                        }
+
+                    }
+                    physicians_main_list.innerHTML = ""
+                    var dataset = response.dataset
+                    console.log(response.dataset)
+                    for (let physician of dataset) {
+                        if (response.deleted) {
+                            var tdRow = `<td class="text-center"><a href="#" onclick="assignLink(event)" data-toggle="modal" data-name="$" data-type="physician" data-action="delete" data-id="${physician[6]}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td><td class="text-center restore_c" id="restore-column-value"> <a href="#" onclick="assignLink(event)" data-toggle="modal" data-name="$" data-type="physician" data-action="restore" data-id="${physician[6]}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>`
+
+                        } else {
+                            var tdRow = `<td class="text-center"><a href="#" onclick="assignLink(event)" data-toggle="modal" data-name="$" data-type="physician" data-action="delete" data-id="${physician[6]}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>`
+                        }
+                        var HTML = `
+                        <tr>
+                            <td><img src="${physician[0]}" class="physician_sm_pic"></td>
+                            <td>${physician[1]}</td>
+                            <td id="object-${physician[6]}" >${physician[2]}</td>
+                            <td>${physician[3]}</td>
+                            <td class="text-center"><a href="#">View All</a></td>
+                            <td class="text-center"><a href="${physician[5]}" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                            ${tdRow}
+                        </tr>`
+
+                        physicians_main_list.insertAdjacentHTML('beforeend',HTML)
+                
+                        }
+                    return;
+                }
+                // Write Javascript function here
+            },
+            error: function() {
+            console.log('error')
+            }
+        })
+        return
+}
+</script>

@@ -1,0 +1,34 @@
+<header class="header shop">
+    <!-- Header Inner -->
+    <div class="header-inner">
+        <div class="container">
+            <div class="cat-nav-head">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="logo">RECOVERY SHOP - ONBOARDING  |</div>	
+                        <span class="screen-darken"></span>		
+                        <button data-trigger="navbar_main" class="d-lg-none btn" type="button">  <i class="fa-solid fa-bars pr-2"></i> </button>
+                        <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg  navbar-light">
+                            <div class="container-fluid px-0">
+                                <div class="offcanvas-header float-right">  
+                                    <button class="btn-close float-end"><i class="fa-solid fa-circle-xmark"></i></button>
+                                </div>
+                                <div class="container text-center">
+                                    <ul class="navbar-nav bt-1">
+                                        <li class="nav-item"><a class="nav-link" href="products.html"> Products</a></li> 
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'support:contactUs' %}"> Support </a></li>  	 
+                                    </ul>
+                                    <ul class="navbar-nav bt-1">
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'register:login' %}"> Login</a></li>
+                                        <li class="nav-item separate_li">/</li>
+                                        <li class="nav-item"><a class="nav-link" href="{% url 'register:register' %}"> Register </a></li> 
+                                    </ul>
+                                </div>
+                            </div> 
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

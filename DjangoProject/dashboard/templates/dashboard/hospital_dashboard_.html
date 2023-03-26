@@ -1,0 +1,299 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is the HTML for the SuperUser that will see the Master Dashboard with all facilities and hospitals  --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <!-- Start Hospital Account Details -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h2 class="w-100">Hospital Account Details</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{% url 'quickstart:qs_staff' %}" class="btn btn-primary mx-2 btn2_blue fl-right">Add Physician </a>
+                            <a href="#" class="btn btn-primary btn2_blue fl-right">Complete Yourself</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th>Hospital Name</th>
+                                    <th>Full Name</th>
+                                    <th>Email Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Tax ID</th>
+                                    <th>Bank Account#</th>
+                                    <th>Routing</th>
+                                    <th>Business Address</th>
+                                    <th>Hospital Website</th>
+                                    <th>Total Physicians</th>
+                                    <th class="text-center">Edit</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                  <td>{{request.user.hospitals.all.0.name}}</td>
+
+
+                                  <td class="text-center">{% if request.user.get_full_name %}  {{request.user.get_full_name}}</td> {% else %} <a href="#" data-action="update" onclick="assignLink(event)" data-type="Name"  data-toggle="modal" data-id="{{request.user.id}}" data-target="#reminder" class="red">Assign </a> {% endif %}    
+                                  <td class="text-center">{% if request.user.email %} {{request.user.email}} </td> {% else %} <a href="#" onclick="assignLink(event)" data-toggle="modal" data-type="Email Address" data-action="update" data-id="{{request.user.id}}" data-target="#reminder" class="red">Assign </a> {% endif %}    
+                                  <td class="text-center">{% if request.user.userprofileadmin.mobile_contact %}  {{request.user.userprofileadmin.mobile_contact}}</td> {% else %} <a href="#" data-type="Mobile Contact Information" data-action="update"  onclick="assignLink(event)" data-toggle="modal" data-id="{{request.user.id}}" data-target="#reminder" class="red">Assign </a>{% endif %}    
+                                  <td>{{request.user.hospitals.all.0.taxid}}</td>
+                                  <td>{{request.user.hospitals.all.0.bankaccount}}</td>
+                                  <td class="text-center">{{request.user.hospitals.all.0.taxid}}</td>
+                                  <td>{{request.user.hospitals.all.0.get_full_address}}</td>
+                                  <td>{{request.user.hospitals.all.0.website}}</td>
+                                  <td class="text-center">{{request.user.hospitals.all.0.total_physicians}}</td>
+                                  <td class="text-center"><a href="{% url 'register:editHospital' request.user.hospitals.all.0.id %}" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+            <!-- End Hospital Account Details -->
+        </div>
+    </div>
+    <!-- Start Recently Invited Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="w-100">Recently Invited Physicians</h2>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th>Hospital Name </th>
+                                    <th>Physician Name </th>
+                                    <th>Physician Email</th>
+                                    <th>Physician Specialty</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                  {% for qs_physician in invited_physician_set %}
+                                  <tr>
+                                      <td> {{qs_physician.getHospitalName}}</td>
+                                      <td>{{qs_physician.get_full_name}}</td>
+                                      <td>{{qs_physician.email}}</td>
+                                      <td>Hip & Knee / Shoulder / Regenerative</td>
+
+                                      <td class="text-center"><a href="#" data-toggle="modal" data-target="#update_profile" class="red">
+                                        {% if qs_physician.getIsEmailed %}
+                                        <span style="color:green">Emailed/</span>
+                                        {% else %} 
+                                        <span style="color:red">Not Emailed/</span>
+                                        {% endif %}
+                                        {% if qs_physician.getIsRecommending %}
+                                        <span style="color:green">Recommending/</span>
+                                        {% else %} 
+                                        <span style="color:red">Not Recommending/</span>
+                                        {% endif %}
+                                        {% if qs_physician.getIsOnboarded %}
+                                        <span style="color:green">Onboarded</span>
+                                        {% else %} 
+                                        <span style="color:red">Not Onboarded </span>
+                                        {% endif %}
+                                      </a></td>
+                                  </tr>
+                                  {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Recently Invited Physicians List -->
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="w-100">Physicians List</h2>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search by Physician, Hospital, Specialty, Body Parts">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th class="text-center">Picture</th>
+                                    <th>Hospital Name</th>
+                                    <th>Physician Name</th>
+                                    <th>Specialty Areas</th>
+                                    <th class="text-center">Recommended Products</th>
+                                    <th class="text-center">Edit</th>
+                                    {% comment %}
+                                    <th class="text-center">Remove</th>
+                                    {% endcomment %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                              {% for physician in physician_set %}
+                              <tr>
+                                  <td><img src="{{physician.returnPictureURL}}" class="physician_sm_pic"></td>
+                                  <td>{{physician.facility.name}}</td>
+                                  <td>{{physician.get_full_name}}</td>
+                                  <td>{{physician.buildSpecialtyString}}</td>
+                                  <td class="text-center"><a href="{% url 'views:physician_detail_view' physician.id %}">View All</a></td>
+                                  <td class="text-center"><a href="{% url 'register:editPhysician' physician.id %}?showAll=True" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                  {% comment %}
+                                  <td class="text-center"><a href="#" class=" "><i class="fa-solid fa-trash-can"></i></a></td>
+                                  {% endcomment %}
+                              </tr>
+                              {% endfor %} 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<div class="modal fade" id="reminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto" id="heading-pop">{{heading}}</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"><strong id="modal-message-inner">{{message}}</strong></p>
+            </div>
+            <form action="" method="POST" id="manual-form" style="display:block;margin-bottom:2.5vw;margin-left:5vh;">
+                {% csrf_token %}
+                <input type="hidden" name="autocreate" value="1">
+                <div id="input-credentials" style="margin-right:10px;">
+                    {% if updateProfile %}
+                    <input style="margin-left:30px;" id="inp_box" required type="text" name="update" placeholder="Please Update Your Profile">
+                    {% else %}
+                    <input style="margin-left:30px;" required type="email" name="email" placeholder="Please Input Email Address to Auto-Assign and Email Credentials">
+                    {% endif %}
+                </div>
+                {% if updateProfile %}
+                <button style="background-color: rgb(4, 192, 4);margin-left:20px;height:25px;" name="sub_but" id="sub_but" type="submit">{% if updateProfile %} Update Profile {% else %} Generate Credentials {% endif %}</button>
+                {% else %}
+                <button style="background-color: rgb(4, 192, 4);margin-left:20px;height:25px;" name="sub_but" id="sub_but" type="submit">{% if updateProfile %} Update Profile {% else %} Generate Credentials {% endif %}</button>
+                {% endif %}
+            </form>
+          
+            <div class="modal-footer mx-auto" id="delete_buttons" {% if updateProfile %} style="display:none;" {% endif %}>
+                <a href="#" id="modal_left_button" class="btn btn-secondary btn_fade_blue"> {{left_button}}</a>
+                <a href="#" id="modal_right_button" class="btn btn-primary btn_blue">{{right_button}}</a>
+            </div>
+        </div>
+    </div>
+ </div>
+{% comment %}
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+
+<script>
+
+function assignLink(event) {
+    console.log('hello')
+    var value = event.target.getAttribute('data-type')
+    var modalmessage_inner = document.getElementById('modal-message-inner')
+    var manual_form = document.getElementById('manual-form')
+    var entity_id = event.target.getAttribute('data-id')
+    var sub_but = document.getElementById("sub_but")
+    var inp_box = document.getElementById("inp_box")
+    var clickUpdate = document.getElementById('clickUpdate')
+    manual_form.style.display = 'block'
+    modalmessage_inner.textContent = ``
+    manual_form.action = `/dashboard/update/info/${entity_id}/`
+    sub_but.textContent = `Update ${value}`
+    if (value == 'Email Address') {
+        sub_but.value = "email"
+        sub_but.textContent = "Provide Email Address"
+        inp_box.placeholder = "e.g yourname@mail.com"
+       
+    } else if (value == 'Name') {
+        sub_but.textContent = "Provide Name"
+        sub_but.value = "name"
+        inp_box.placeholder = "Provide Name"
+    } else {
+        sub_but.textContent = "Provide Mobile Contact Information"
+        sub_but.value = "mobile"
+        inp_box.placeholder = "Provide Mobile Contact Information"
+
+    }
+
+}
+
+
+
+
+
+</script>
+{% endblock %}

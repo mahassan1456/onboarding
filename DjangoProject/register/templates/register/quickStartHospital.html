@@ -1,0 +1,16 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!--   -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+
+
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+<!-- BEGIN HTML BLOCK -->
+
+{% block content %}
+{% include 'register/register_form.html' %}
+{% endblock %}

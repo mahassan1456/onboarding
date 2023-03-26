@@ -1,0 +1,42 @@
+{% extends 'medical/base2.html' %}
+
+{% block styles %}
+{{block.super}}
+<style>
+img {
+    position:fixed;
+    top:80px;
+}
+</style>
+
+{% endblock styles %}
+DjangoProject/media/uploads/onboarding1.jpeg
+{% block content %}
+
+<img src="{{MEDIA_URL}}/UPLOADS/onboarding1.jpeg" width="1440" height="765" alt="">
+
+
+
+<div id="container-outer" class="container-big">
+
+    <div id="nav-bar-container" class="container-wide-short">
+        
+    </div>
+
+    <div id="body" class="container-medium">
+
+       
+
+    </div>
+
+
+    <div id="footer" class="container-wide">
+
+
+    </div>
+    
+</div>
+
+
+
+{% endblock %}

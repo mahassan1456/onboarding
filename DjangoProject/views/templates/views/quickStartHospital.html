@@ -1,0 +1,226 @@
+
+
+
+
+
+
+
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+
+
+
+
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res" method="POST">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="w-100">Hospital List <a href="{% url 'register:register' %}">Add Hospital</a><a href="{% url 'views:view_hospitals'%}">Onboarded Hospitals</a><button onclick="downloadXLS(event)">Download XLSX</button></h2>
+                        </div>
+                        <div class="col-md-4" {% if not request.user.is_superuser %} style="visibility: hidden;" {% endif %}>
+                            <div class="input-group">
+                                <input type="hidden" value="qs_hospitals" name="datatype">
+                                <br><br>
+                                <select name="choice" id="selected_hospital" class="form-control" >
+                                    {% for choice in choices %}
+                                    <option value="{{choice}}" {% if choice == selection %} selected {% endif %}>{{choice}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div>
+                                <button type="submit" name="button" value="invited"> Filter  </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" name="search" id="search_box" class="form-control" placeholder="Search Hospital By Name,City,State,Zip">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" name="button" value="search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            {% for error in form.non_field_errors %}
+                                <p>{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th>Hospital Name</th>
+                                    <th>Admin Email</th>
+                                    <th>Admin Name</th>
+                                    <th>Status</th>
+                                    <th class="text-center">Remove</th>
+                                </tr>
+                                </thead>
+                                <tbody id="object-main-list">
+                                {% for hospital in hospital_set %}
+                                <tr>
+                                    <td id="object-{{hospital.id}}">{{hospital.hospital_name}}</td>
+                                    <td>{{hospital.getEmail}}</td>
+                                    <td>{{hospital.get_full_name}} </td>
+                                    <td>
+                                        <a href="#" onclick="assignLink(event)" data-toggle="modal" data-action="email" data-type="qshospital" data-id="{{hospital.id}}" data-target="#reminder">
+                                            {% if hospital.isComplete %}
+                                            <span style="color:green">Complete </span>
+                                            {% else %}
+                                            {% if hospital.getIsEmailed %}
+                                            <span style="color:green">Invited /</span>
+                                            {% else %}
+                                            <span style="color:red">Invited /</span>
+                                            {% endif %} 
+                                            {% if hospital.getIsRegistered  %}
+                                            <span style="color:green">Registered </span>
+                                            {% else %}
+                                            <span style="color:red">Registered </span>
+                                            {% endif %} 
+                                            {% endif %}
+                                        </a>
+                                    </td>
+                                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-action="delete" data-toggle="modal" data-type="qshospital" data-id="{{hospital.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                                </tr>
+                                
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Modal -->
+
+
+{% include 'dashboard/components/pop_up_action.html' %}
+
+{% comment %}
+<!-- For the link to open the modal -->
+<a href="#" onclick="assignLink2(event)" data-toggle="modal" data-id="{{hospital.id}}" data-target="#reminder" class="red">Unassiged</a>
+<!--  -->
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto" id="modal-title">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong id="message-modal">Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" id="button-left" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" id="button-right" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+<script>
+function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var URL = `${event.target.getAttribute("data-label")}?datatype=product`
+        var hospital_choice = document.getElementById('selected_hospital').value
+        var search_box = document.getElementById('search_box').value
+        var url = "{% url 'support:downloadXLS' %}" + "?datatype=hospital" + `&selected_hospital=${hospital_choice}&search=${search_box}&qs=True`
+        console.log(url)
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "physicians.xlsx"
+            a.click()
+        })
+    }
+    // function assignLink2(event) {
+    //     var value = event.target.value
+    //     var modalTitle = document.getElementById('heading-pop');
+    //     var messageTitle = document.getElementById('modal-message-inner')
+    //     var buttonleft = document.getElementById('modal_left_button');
+    //     var buttonright= document.getElementById('modal_right_button')
+
+    //     modalTitle.textContent = "Send User Credentials"
+
+
+        
+
+
+
+    // }
+
+
+
+    function getHospitals(event) {
+    var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    var choiceValue = event.target.value;
+    var physicians_main_list = document.getElementById('object_main_list');
+    var json_obj = {}
+    json_obj['choice'] = choiceValue;
+    var callbackURL = '/views/get/qshospitals/'
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrf_token },
+            dataType: "json",
+            data: json_obj,
+            url: callbackURL,
+            // Receiving JSON Response Back from DB
+            success: function(response) {
+                console.log(response)
+                console.log('wtf')
+                if (response.dataset) {
+                    physicians_main_list.innerHTML = ""
+                    var dataset = response.dataset
+                    console.log(response.dataset)
+                    for (let physician of dataset) { 
+                        var HTML = `
+                        <tr>
+                            <td><img src="${physician[0]}" class="physician_sm_pic"></td>
+                            <td>${physician[1]}</td>
+                            <td>${physician[2]}</td>
+                            <td>Not Provided</td>
+                            <td>${physician[3]}</td>
+                            <td class="text-center"><a href="#">View All</a></td>
+                            <td class="text-center"><a href="#" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                            <td class="text-center"><a href="#" class=" "><i class="fa-solid fa-trash-can"></i></a></td>
+                        </tr>`
+
+                        physicians_main_list.insertAdjacentHTML('beforeend',HTML)
+                
+                        }
+                    return;
+                }
+                // Write Javascript function here
+            },
+            error: function() {
+            console.log('error')
+            }
+        })
+        return
+}
+</script>
+{% endblock %}

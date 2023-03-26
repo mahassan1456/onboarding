@@ -1,0 +1,321 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Edit View for Physician Details --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+<!-- BEGIN HTML BLOCK -->
+{% block content %}
+<!-- Start Recommended Products Section -->
+
+
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto">
+            <h4>Welcome {{physician.firstName}} @ {{physician.facility.name}}</h4>
+            {% if show_all %}
+            <h5>Please Edit Your Details</h5>
+            {% else %}
+            <h5>Please Select Your Recommended Products</h5>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <div class="login_wrap">
+                <form class="py-4 needs-validation" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if show_all or request.GET.show_all %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img {% if physician.picture %} src="{{physician.picture.url}}" {% else %} src="/media/generic_profile.jpeg" {% endif %} class="physician_picture">
+                        </div>
+                        <div class="form-group has_input_icon col-md-9">
+                            <label>Please Change Your Picture</label>
+                            {{form.picture}} 
+                            <label class="my-3">About Physician</label>
+                            {{form.about_me}}
+                        </div>
+                    </div>
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label> First Name</label> 
+                        {{form.firstName}}
+                    </div>
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>{{form.lastName.label}}</label> 
+                        {{form.lastName}}
+                    </div>
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>{{form.email.label}}</label> 
+                        {{form.email}}
+                    </div>
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>Hospital Name</label> 
+                        <input type="text" name="Hospital Name" value="{{physician.facility.name}}" class="form-control">
+                    </div>
+                    {% endif %}
+                    <div class="form-group has_input_icon col-md-12 col-lg-6 col-12">
+                        <label>Body Parts <button type="submit" onclick="refreshProducts23(event)" class="clear_btn" value="clear"><i class="fa-solid fa-xmark"></i>Clear</button></label> 
+                        <div class="container recommend_products_wrapper">
+                            <div class="col-md-12">
+                                <div class="widget-content">
+                                    <ul class="listing" id="specialtySelect" onchange="refreshProducts23(event)">
+                                        <!-- Looping Through Set of Tags from the Database and if they are present in the current tags 
+                                        of the physician then have the checkbox checked -->
+                                        {% for tag in tags %}
+                                        <li><label>{{tag.tag}}<input type="checkbox" data-tag="{{tag.tag|lower}}" name="selections" value="{{tag.id}}" {% if tag.tag in current_tags %} checked {% endif %}></label></li>
+                                        {% endfor %}	  
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="form-group has_input_icon col-md-12 col-lg-6 col-12">
+                        <label>Recommended Products</label>
+                        <div class="container recommend_products_wrapper">
+                            <div class="col-md-12">
+                                <div class="widget-content">
+                                    <ul id="accordion">
+                                        {% for specialty,products in physician.buildProductList.items %}
+                                        <li id="{{specialty | lower }}">
+                                            <h4 class="xp23">{{specialty | title}} <span class="plusminus" onclick="dropProducts(event)">-</span></h4>
+                                            <ul class="listing" id="{{specialty}}_show" style="display:block;">
+                                                {% for product in products %}												
+                                                <li>
+                                                    <a href="#" class="rc_product_img"><img  src="{{product.1.0.getFirstImage}}"></a><label>{{product.1.0.name}}<input type="checkbox" name="{{specialty}}-" value="{{product.1.0.name}}" {{product.1.1}}></label>
+                                                    <a href="#"  data-toggle="modal" onclick="buildDetails(event)" data-product="{{product.1.0.id}}" data-target="#product_detail" class="view_details"> (View Product Detail)</a>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group has_input_icon col-12 col-md-12">
+                        <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Update {% if show_all %} Profile {% else %} Products {% endif %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade bd-example-modal-lg" id="product_detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Start Recommended Products Section -->
+                <div class="container login_signup_wrap">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="product_image_large border"><img id="image-main" src="images/ADL4.jpg"></div>
+                            <!-- Thumbnails -->
+                            <div class="product_image_thumbnail" id="product-thumbs">
+                                <a href="#"><img src="images/ADL4.jpg"></a>
+                                <a href="#"><img src="images/ADL4.jpg"></a>
+                                <a href="#"><img src="images/ADL4.jpg"></a>
+                                <a href="#"><img src="images/ADL4.jpg"></a>
+                            </div>
+                        </div>
+                        <div class="col-md-8 text-left">
+                            <h2 id="name-label">ADL Kit</h2>
+                            <div class="product_specialties"><strong>Specialties:</strong><span id="specialty-label"> Knee</span></div>
+                            <div id="heading-row">
+                                <p>The FabLife hip kit is the perfect set of accessories for those who need assistance in their day-to-day tasks.</p>
+                                <p>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities</p>
+                            </div>
+                            <div class="price" id="price-label">$45.00</div>
+                            <div class="product_manufacturer"><small><strong>Manufacturer:</strong> ADL</small></div>
+                            <div class="product_sku"><small><strong>SKU:</strong> Not Available</small></div>
+                            <div class="product_qty"><small><strong>Quantity:</strong> 100</small></div>
+                        </div>
+                    </div>
+                    <!--Start long description -->
+                    <div class="row my-4">
+                        <div class="col-12 text-left">
+                            <ul class="a-unordered_list" id="desc-list">
+                                <li>The FabLife hip kit is the perfect set of accessories for those who need assistance in their day-to-day tasks.</li>
+                                <li>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities.</li>
+                                <li>A total package that is ideal for those undergoing hip, knee, and back rehabilitation.</li>
+                                <li>Included in the kit are a 26″ Reacher, a contoured sponge with a 17″ Handle, a formed sock aid, and an 18″ Plastic shoehorn.</li>
+                                <li>The kit is a terrific asset to those moving slowly and carefully pre- and <a href="#">post-surgery.</a></li>
+                            </ul>
+                            <h5>
+                            Product Specifications</h2>	
+                            <div class="table_wrapper">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Ean</th>
+                                            <td>0714905049766</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Global Trade Identification Number</th>
+                                            <td>00714905049766</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Height</th>
+                                            <td>36 inches</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Included Components</th>
+                                            <td>Hip Kit</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Length</th>
+                                            <td>6 inches</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Model Number</th>
+                                            <td>86-0074</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Number of Items</th>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Part Number</th>
+                                            <td>86-0074</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Size</th>
+                                            <td>26″ Reacher, Plstc Shoehorn</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Style</th>
+                                            <td>With Formed Sock Aid, Sponge</td>
+                                        </tr>
+                                        <tr>
+                                            <th>UNSPSC Code</th>
+                                            <td>42000000</td>
+                                        </tr>
+                                        <tr>
+                                            <th>UPC</th>
+                                            <td>714905049766</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Width</th>
+                                            <td>6 inches</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End long description -->	
+                </div>
+                <!-- End Recommended Products Section -->	 		
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MODAL -->
+
+<!-- End Recommended Products Section -->
+<script src="{% static 'quickstart/js/welcomePhysician.js' %}?version=4.6"></script>	 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var listings = document.getElementsByClassName('listing')
+        for (let val of listings) {
+            val.style.display = 'block'
+        }
+  // code to be executed when the web page has finished loading
+});
+
+
+
+function buildDetails(event) {
+  // POST request must account for the CSRF TOKEN to Prevent Cross-Site-Request-Forgery
+  var _csrf_token = document.querySelector("input[type=hidden]").value;
+  var callbackURL = "/views/product/detailpopup/"
+  var target = event.target
+  var productID = target.getAttribute('data-product')
+  var json_obj = {'product':productID}
+  $.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": _csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+        if (response) {
+            var product = response.dataset
+            console.log(response)
+            
+            var imgmain = document.getElementById('image-main')
+            var thumbnails = document.getElementById('product-thumbs')
+            var nameLabel = document.getElementById('name-label')
+            var specialtyLabel = document.getElementById('specialty-label')
+            var headingRow = document.getElementById('heading-row')
+            var priceLabel = document.getElementById('price-label')
+            var descList = document.getElementById('desc-list')
+           
+
+            imgmain.src = product['picture'][0]
+            thumbnails.innerHTML = ""
+
+            for (let url of product['picture']) {
+                var a = document.createElement('a')
+                var img = document.createElement('img')
+                img.src = url
+                a.appendChild(img)
+                thumbnails.appendChild(a)
+            }
+
+            nameLabel.firstChild.textContent = product['name']
+            specialtyLabel.firstChild.textContent = product['specialties']
+
+            headingRow.innerHTML = ""
+
+            for (var i =0; i < 2; i++) {
+                var p = document.createElement('p')
+                p.textContent = product['description'][i]
+                headingRow.appendChild(p)
+            }
+
+            priceLabel.firstChild.textContent = product['price']
+
+            descList.innerHTML = ""
+
+            for (let bullet of product['description']) {
+                console.log(bullet)
+                var li = document.createElement('li')
+                li.textContent = bullet
+                descList.appendChild(li)
+            }
+
+
+
+
+        }
+
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+}
+
+</script> 
+{% endblock %}
+
+
+

@@ -1,0 +1,60 @@
+
+<div class="col-md-4">
+    <h2 class="w-100">Specialties <a href="{% url 'support:addSpecialty' %}">Add Specialty</a><a><button value="xls" name="button" onclick="downloadXLS(event)">Download XLS</button></a></h2>
+</div>
+
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="{{searchTerm}}">
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" name="button" value="search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_superuser %}
+<div class="col-md-4">
+    <div class="input-group">
+        <select id="selected_product" name="productID" class="form-control">
+            <option value="all" {% if not product_name %} selected {% endif %}>All</option>
+            {% for product in products_set %}
+            <option value="{{product.name}}" {% if product.name.lower == product_name.lower %} selected {% endif %}>{{product.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <button name="button" value="dropdown" type="submit">Filter</button>
+    </div>
+</div>
+{% endif %}
+<div class="col-12 pl-0">
+    <div class="table-responsive">
+        <table class="table table-bordered my-3 table-sm table-hover">
+            <thead>
+                <tr class="align-text-top">
+                    
+                    <th>Specialty Name</th>
+                    <th>Description</th>
+                    <th class="text-center">Associated Products</th>
+                    <th>Details</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Remove</th>
+                </tr>
+            </thead>
+            <tbody id="physician_main_list">
+                {% for specialty in specialty_set %}
+                <tr>
+                    <td id="object-{{specialty.id}}">{{specialty.tag}}</td>
+                    <td><a href="">{{specialty.description}}</a></td>
+                    <td>{{specialty.returnProductsString}}</td>
+                    <td class="text-center"><a href="">View</a></td>
+                    <td class="text-center"><a href="{% url 'register:editSpecialty' specialty.id %}" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    <td class="text-center"><a href="#" onclick="assignLink(event)" data-toggle="modal" data-id="{{specialty.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+

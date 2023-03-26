@@ -1,0 +1,35 @@
+{% extends 'medical/base2.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{block.super}}
+
+<style>
+
+
+</style>
+
+
+
+{% endblock styles %}
+
+
+
+{% block content %}
+
+<div class="outer-container">
+
+{% for value in hospital %}
+{% if forloop.counter0 > 2 %}
+    <h3>{{value.0}}</h3>
+    <p>{{value.1}}</p>
+{% endif %}
+{% endfor %}
+
+
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,133 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load views_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+<!-- Start Recommended Products Section -->
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <h1>Invite a Physician</h1>
+        </div>
+    </div>
+    <!-- start filter -->
+    
+
+    <!-- end filter -->	 
+</div>
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <div class="login_wrap">
+                <form class="py-4 needs-validation" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>{{form.first_name.label}}</label> 
+                            {{form.first_name}}
+                        </div>
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>{{form.last_name.label}}</label> 
+                            {{form.last_name}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>Email</label> 
+                            {{form.email}}
+                        </div>
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>Specialties</label>
+                            <small class="float-left">For Multiselect hold Ctrl(windows) or Cmd(mac)</small>
+                            {{form.specialty}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-12">
+                            <button type="submit" id="form_btn_id" class="btn-primary btn-lg btn-block primary_btn">Send Invite</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Accordian JS -->
+<script>
+    $(document).ready(function () {
+    	$("#accordion li > h4").click(function () {
+    
+    		if ($(this).next().is(':visible')) {
+    			$(this).next().slideUp(300);
+    			$(this).children(".plusminus").text('+');
+    		} else {
+    			$(this).next("#accordion ul").slideDown(300);
+    			$(this).children(".plusminus").text('-');
+    		}
+    	});
+    });
+    
+    function populateName(event) {
+        var value = event.target.value 
+        var hospitalName = document.getElementById('hospitalNameBox')
+        if (value) {
+            hospitalName.style.display = 'none'
+            hospitalName.previousElementSibling.style.display = 'none';
+        } else {
+            hospitalName.style.display = 'block'
+            hospitalName.previousElementSibling.style.display = 'block';
+        }
+        }
+    
+        function populateSelections(event) {
+        var value = event.target.value;
+
+        var hospital_onboarded_b = document.getElementById('hospital_onboarded_b')
+        var hospital_invited_b = document.getElementById('hospital_invited_b')
+        var hospital_new_b = document.getElementById('hospital_new_b')
+
+    
+        if (value == 'new') {
+    
+            hospital_new_b.style.display = 'block'
+            hospital_invited_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+        } else if (value == 'onboarded') {
+            hospital_onboarded_b.style.display = 'block';
+            hospital_invited_b.style.display = 'none'
+            hospital_new_b.style.display = 'none'
+        } else if (value == 'invite') {
+
+            hospital_invited_b.style.display = 'block'
+            hospital_new_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+ 
+        } else {
+            hospital_invited_b.style.display = 'none'
+            hospital_new_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+        }
+        }
+    
+        function buildEmailFields(event) {
+        var selectValue = event.target.value
+        var emailMessageValue = document.getElementById('emailmessagebox')
+        var emailMessageLabel = document.getElementById('emailMessageLabel')
+        
+    
+        if (selectValue == 'custom') {
+            emailMessageValue.style.display = 'block'
+            emailMessageLabel.style.display = 'block'
+        } else {
+            emailMessageValue.style.display = 'none';
+            emailMessageLabel.style.display = 'none'
+        }
+        }
+</script>
+<!-- End Accordian JS -->
+{% endblock %}

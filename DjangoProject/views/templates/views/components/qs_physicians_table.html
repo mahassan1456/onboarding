@@ -1,0 +1,148 @@
+<div class="col-md-4">
+    <h2 class="w-100">Physicians Listdddddd <a href="{% url 'support:addPhysician' %}?new=True">Add Physician</a><a href="{% url 'views:view_physicians' %}">Onboarded Physicians</a><a href=""><button onclick="downloadXLS(event)">Download XLSX</button></a></h2>
+</div>
+{% comment %}
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" name="search" id="search_box" class="form-control" placeholder="Search by Physician, Specialty, Body Parts">
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+<div class="col-md-4" {% if not request.user.is_superuser %} style="visibility: hidden;" {% endif %}>
+    <div class="input-group">
+        <input type="hidden" value="physicians" name="datatype">
+        <select name="qs_state" id="selected_hospital" class="form-control" onchange="getPhysiciansQS(event)">
+            <option value="all" selected>All</option>
+            <option value="uassgn">Unassigned</option>
+            <option value="rmd" >Not Recommending</option>
+            <option value="onb">Not Onboarded</option>
+            <option value="com">Completed</option>  
+        </select>
+    </div>
+    <div>
+        <button></button>
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search by Physician, Specialty, Body Parts">
+        <div class="input-group-btn">
+            <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 pl-0">
+    <div class="table-responsive">
+        <table class="table table-bordered my-3 table-sm table-hover">
+            <thead>
+                <tr class="align-text-top">
+                    <th>Hospital Name</th>
+                    <th>Physician Name</th>
+                    <th>Body Parts</th>
+                    <th class="text-center">Status</th>
+                    <th>Reminder</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="physician_main_list">
+                {% for physician in object_set %}
+                <tr>
+                    <td>{{physician.getHospitalName}}</td>
+                    <td><a href="{% url 'views:physician_detail_view' physician.id %}" id="object-{{physician.id}}">{{physician.get_full_name}}</a></td>
+                    {% if physician.specialty.all %}
+                    <td>
+                      {{physician.buildSpecialtyString}}
+                    </td>
+                    {% else %}
+                    <td class="text-center"><a href=""><a href="{% url 'register:editPhysician' physician.id %}">None</a></td>
+                    {% endif %}
+                    <td>
+                    {% if physician.isComplete_ %}
+                    <span style="color:green">Complete </span>
+                    {% else %}
+                    {% if physician.getIsEmailed %}
+                    <span style="color:green">Invited /</span>
+                    {% else %}
+                    <span style="color:red">Invited /</span>
+                    {% endif %} 
+                    {% if physician.getIsOnboarded  %}
+                    <span style="color:green">Onboarded /</span>
+                    {% else %}
+                    <span style="color:red">Onboarded /</span>
+                    {% endif %} 
+                    {% if physician.getIsRecommending %}
+                    
+                    <span style="color:green">Recommending</span>
+                    {% else %}
+                    <span style="color:red">Recommending</span>
+                    {% endif %} 
+                    {% endif %}
+                    </td>
+                    
+                    <td class="text-center"><a href="#" onclick="assignLink(event)" id="reminder-button" data-flag="reminder-qsp"  data-toggle="modal" data-type="physicianqs" data-action="reminder"  data-id="{{physician.id}}" data-target="#reminder" class="red">{% if not physician.is_recommending %} <span style="color:red;">Send Reminder</span> {% else %}<span style="color:green;">Recommending</span>{% endif %}  </a></td>
+                    <td class="text-center"><a href="#" onclick="assignLink(event)"  data-toggle="modal" data-type="physicianqs" data-action="delete"  data-id="{{physician.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+
+function getPhysiciansQS(event) {
+    var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    var qs_state = event.target.value;
+    var physicians_main_list = document.getElementById('physician_main_list');
+    var json_obj = {}
+    json_obj['qs_state'] = qs_state;
+    var callbackURL = '/views/filter/physician/listview/?qs=True'
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrf_token },
+            dataType: "json",
+            data: json_obj,
+            url: callbackURL,
+            // Receiving JSON Response Back from DB
+            success: function(response) {
+                console.log(response)
+                console.log('wtf')
+                if (response.dataset) {
+                    physicians_main_list.innerHTML = ""
+                    var dataset = response.dataset
+                    console.log(response.dataset)
+                    for (let physician of dataset) { 
+                        if (physician[5]) {
+                            var color = 'red'
+                        } else {
+                            var color = 'green'
+                        }
+                        var HTML = `
+                        <tr>
+                            <td>${physician[1]}</td>
+                            <td id="object-${physician[7]}" >${physician[2]}</td>
+                            <td>${physician[3]}</td>
+                            <td class="text-center"><a href="#">${physician[4]}</a></td>
+                            <td class="text-center"><a href="#" onclick="assignLink(event)" id="reminder-button" data-flag="reminder-qsp"  data-toggle="modal" data-type="physicianqs" data-action="reminder"  data-id="${physician[7]}" data-target="#reminder" class="red"> <span style="color:${color};">${physician[6]}</span></a></td>
+                            <td class="text-center"><a href="#" class=" "><i class="fa-solid fa-trash-can"></i></a></td>
+                        </tr>`
+
+                        physicians_main_list.insertAdjacentHTML('beforeend',HTML)
+                
+                        }
+                    return;
+                }
+                // Write Javascript function here
+            },
+            error: function() {
+            console.log('error')
+            }
+        })
+        return
+    }
+</script>

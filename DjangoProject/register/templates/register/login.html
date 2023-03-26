@@ -1,0 +1,83 @@
+{% extends 'register/base.html' %}
+
+{% block head %}
+{{block.super}}
+{% endblock head %}
+<!-- End Responsive top Menus -->	 
+	
+
+	 
+{% block content %}
+	
+	 <!-- Start Login -->
+	
+	 <div class="container login_signup_wrap">
+	 <div class="row">
+	 
+	 <div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+	 <div style="display:{{display}};" class="alert alert-success alert_custom w-75 mx-auto">Successfully Created Account Please Sign In</div>
+	 <h1>Welcome Back <i class="fa-regular fa-face-smile green_custom"></i></h1> 
+	 
+	 
+	 </div>
+	 </div>
+	 </div>
+	
+	
+	 <div class="container login_signup_wrap">
+	 <div class="row">
+	 
+	 <div class="col-lg-6 col-md-12 col-12 mx-auto"> 
+     {% include 'register/non_field_errors.html' %}
+	 <div class="login_wrap">
+	 <form class="py-4 needs-validation" method="POST">
+     {% csrf_token %}
+	 {% for field in form %}
+	<div class="form-group has_input_icon col-12">
+	<label>{{field.label}}</label>
+   <span class="fa-solid fa-at form_control_style"></span>
+    {{field}}
+  </div>
+	 
+  {% endfor %}
+  	<div class="col-12 mx-auto"> <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Login Now</button></div>
+	 
+	 </form>  
+	 	
+	 <div class="row">
+	<div class="form-group col-12 col-md-12 "><a href="#">Forgot your password?</a></div>  
+	 </div>
+	 	 </div>
+
+	</div>
+	
+	 </div>
+	 
+	 </div>
+
+
+	
+	 <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+        </script>
+<!-- Footer is in register/base.html -->
+  
+
+{% endblock %}

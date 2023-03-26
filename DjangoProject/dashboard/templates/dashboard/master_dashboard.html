@@ -1,0 +1,285 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is the HTML for the SuperUser that will see the Master Dashboard with all facilities and hospitals  --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+<!-- BEGIN HTML BLOCK -->
+{% block content %}
+<!-- Start Onboarding Statistics -->
+
+
+
+<div class="container">
+   <div class="row">
+      <div class="col-12 pt-5 pb-3 body_content_wrapper">
+         <h2>Onboarding Statistics</h2>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-2 col-sm hac">
+         <div class="c1 widget">
+            Hospitals Added 
+            <div class="digits">{{hospital_count}}</div>
+          <!--  Functionality from views application  -->
+            <a href="{% url 'views:view_hospitals' %}">View All</a>
+         </div>
+      </div>
+      <div class="col-md-2 col-sm hac">
+         <div class="c2 widget">
+            Physicians Added 
+            <div class="digits">{{physician_count}}</div>
+            <a href="{% url 'views:view_physicians' %}">View All</a>
+         </div>
+      </div>
+      <div class="col-md-2 col-sm hac">
+         <div class="c3 widget">
+            Products Added 
+            <div class="digits">{{product_count}}</div>
+            <a href="{% url 'views:view_products' %}">View All</a>
+         </div>
+      </div>
+      <div class="col col-sm hac">
+         <div class="c4 widget">
+            <div class="digits_onboard"><a href="{% url 'quickstart:quickStartHospital' %}"> <i class="fa-solid fa-hospital"></i> Invite Hospital</a></div>
+         </div>
+      </div>
+      <div class="col col-sm hac">
+         <div class="c5 widget">
+            <div class="digits_onboard"><a href="{% url 'quickstart:quickStartPhysician' %}"> <i class="fa-solid fa-user-doctor"></i> Invite Physician</a></div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- End Onboarding Statistics -->	
+<div class="container mt-2">
+   <div class="row">
+      <div class="col-lg-9 col-md-12 col-12 pb-4">
+         <form class="py-4 body_content_wrapper sm_res" action="{% url 'views:view_physicians' %}" method="POST">
+            {% csrf_token %}
+            <div class="col-12 pl-0">
+               <!-- Start Recent Physicians List -->
+               <div class="row">
+                  <div class="col-md-7">
+                     <h2 class="w-100">Recent Physicians List <a href="{% url 'views:view_physicians' %}">View All Physicians</a></h2>
+                  </div>
+                  <div class="col-md-5">
+                     <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search Physician">
+                        <div class="input-group-btn">
+                           <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="table-responsive mb-4">
+                  <table class="table table-bordered my-3 table-sm table-hover">
+                     <thead>
+                        <tr class="align-text-top">
+                           <th>Physician Name</th>
+                           <th>Specialities</th>
+                           <th>Body Parts</th>
+                           <th class="text-center">Recommended Products</th>
+                           <th>Hospital</th>
+                           <th>Listed Date</th>
+                           <th>Edit</th>
+                           <th>Remove</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                      <!-- Loop through Physicians  -->
+                      {% for physician in physician_set %}
+                        <tr>
+                           <td><a href="{% url 'views:physician_detail_view' physician.id %}" id="object-{{physician.id}}">{{ physician.get_full_name }}</a></td>
+                           <td>Not Provided</td>
+                           {% if physician.specialty_ph.all %}
+                           <td>
+                              {{physician.buildSpecialtyString}}
+                          </td>
+                          {% else %}
+                          <td class="text-center"><a href=""><a href="{% url 'register:editPhysician' physician.id %}">Assign</a></td>
+                          {% endif %}
+
+                           <td class="text-center"><a href="#">{% if physician.productitems.all %} View  {% else %} Assign Products {% endif %}</a></td>
+                           <td>{{physician.facility.name}}</td>
+                           <td>{{physician.created_at}}</td>
+                           <td class="text-center"><a href="{% url 'register:editPhysician' physician.id %}?show_all=True" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                           <td class="text-center"><a href="#" onclick="assignLinkDashboard(event)" data-action="delete" data-type="physician" data-toggle="modal" data-id="{{physician.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                        </tr>
+                      {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+         </form>
+         <!-- End Recent Physicians List -->
+         <!-- Start Hospital List -->
+         <form class="py-4 body_content_wrapper sm_res" action="{% url 'views:view_hospitals' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-7">
+                  <h2 class="w-100">Recent Hospital List<a href="{% url 'views:view_hospitals' %}">View All Hospitals</a></h2>  
+                </div>	
+                <div class="col-md-5">
+                  <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search Hospitals">
+                    <div class="input-group-btn">
+                      <button class="btn1 btn-default" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                  </div>
+                </div>	
+            </div>
+         </form> 
+
+            <div class="table-responsive mb-4">
+              <table class="table table-bordered my-3 table-sm table-hover">
+                <thead>
+                  <tr class="align-text-top"><th>Hospital Name</th>
+                  <th>Address</th>
+                  <th>Tax ID</th>
+                  <th>Admin Name</th>
+                  <th class="text-center">Total Physicians</th> 
+                  <th>Website</th>
+                  <th>Edit</th> 
+                  <th>Remove</th> </tr>
+                </thead>
+                <tbody>
+                  <!-- Loop through 5 most recent onboarded Hospitals  -->
+                  {% for hospital in hospital_set %}
+                  <tr>
+                  <td><a href="#" id="object-{{hospital.id}}" >{{hospital.name}}</a></td>
+                  <td>{{hospital.get_full_address}}</td>
+                  <td>{{hospital.taxid}}</td>
+                  <td>{% if not hospital.user or not hospital.user.username or hospital.user.username == 'unassigned' %} <a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" class="red">Assign Admin</a> {% else %} {{hospital.user.username}} {% endif %} </td>
+                  <td class="text-center">{{hospital.total_physicians}}</td>
+                  <td>{{hospital.website}}</td> 
+                  <td class="text-center"><a href="#"><i class="fa-solid fa-user-pen"></i></a></td>
+                  <td class="text-center"><a href="#" onclick="assignLinkDashboard(event)" data-action="delete" data-type="hospital" data-toggle="modal" data-id="{{hospital.id}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table> 
+            </div>		 
+          
+         <!-- End Hospital List -->	 
+        </div>
+      </div>
+      <!-- Start right side column -->
+      <div class="col-lg-3 col-md-12 col-12 mt-2">
+         <!-- Start Activity LOGS -->	
+         <div class="activity_logs">
+            <h2>Latest Activity LOGS</h2>
+            <ul>
+
+               {% for log in log_set %}
+
+            
+               <li>
+                     <div class="log_subject">{% if log.user %} {{log.user.username | title }} ({{log.getUserType}}) {% else %} Anonymous(User) {% endif %}</div>
+                  {% if log.entity_type == 'Physician' %}
+                     <div class="log_action">{{log.getAction}} {{log.action_verbose}}<a  href="{{log.page_link}}">{{log.entity_name}}</a> {% if log.parent_entity_name %} {{log.parent_entity_name}} {% elif log.getHospitalName %} @ {{log.getHospitalName}} {% endif %} on {{log.getDate}}</div>
+                  {% elif log.entity_type == 'Physician(QS/Invite)' %}
+                     <div class="log_action">Invited Physician {{log.entity_name}}<a  href="{{log.page_link}}"> {% if log.getHospitalName %} @ {{log.getHospitalName}} {% endif %} {{log.action_verbose}} {{log.getDate}}</div>
+                  {% elif log.entity_type == 'Product' %}
+                     <div class="log_action">{{log.getAction}} {{log.entity_type}} <a  href="{{log.page_link}}"> {{log.entity_name}} </a> {{log.action_verbose}} on {{log.getDate}}</div>
+                  {% else %}
+                     <div class="log_action">{{log.getAction}} {{log.action_verbose}}<a  href="{{log.page_link}}" style="text-decoration: none;color:blue;">{{log.entity_name}} &nbsp </a> on {{log.getDate}}</div>
+                  {% endif %}
+               </li>
+               {% endfor %}
+            </ul>
+            <a href="{% url 'views:view_activity' %}" class="activity_logs_btn">View All Activity LOGS</a>
+         </div>
+         <!-- End Activity LOGS -->	 
+         <!-- Start Product Uploads Section -->	
+         <div class="upload_products">
+            <h2>Admin Feature</h2>
+            <form name="upload_products">
+              <p><strong>Please upload updated Products</strong></p>
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <div class="my-3">
+                <input class="form-control" type="file" id="formFile">
+              </div>
+              <p>File Format: CSV</p>
+              <button href="" class="upload_products_btn">Upload Product</button>
+            </form>
+         </div>
+         <!-- End Product Uploads Section -->	 
+      </div>
+      <!-- End right side column -->
+   </div>
+   {% comment %}
+</div>
+{% url 'quickstart:assignAdmin' hospital.id %}"
+{% endcomment %}
+{% include 'dashboard/components/pop_up_action.html' %}
+
+<script>
+
+   function assignLinkDashboard(event) {
+        console.log(event.currentTarget)
+        var value = event.currentTarget.getAttribute('data-id')
+        var data_type = event.currentTarget.getAttribute('data-type')
+        var data_action = event.currentTarget.getAttribute('data-action')
+        var data_name = event.currentTarget.getAttribute('data-name')
+        var idName = `object-${value}`
+        var modal_left_button = document.getElementById('modal_left_button')
+        var modal_right_button = document.getElementById('modal_right_button')
+        var heading = document.getElementById('heading-pop')
+        var message = document.getElementById("modal-message-inner")
+        var form = document.getElementById('manual-form')
+        var delete_buttons = document.getElementById('delete_buttons')
+       
+        var object_name = document.getElementById(idName).textContent
+       
+        if (data_action == 'delete') {
+        form.style.display = 'none'
+        delete_buttons.style.display ='block'
+        heading.textContent = `Remove ${data_type}`
+        message.textContent = `Do you want to delete the record for ` + `${data_type} ` + `${object_name}`
+        modal_left_button.textContent = "Delete"
+        modal_right_button.textContent = "Cancel"
+        modal_left_button.href = `/register/remove/` + `${data_type}` + `${value}/`
+        } else if (data_action == 'email') {
+        heading.textContent = `Auto-Assign ${data_type}`
+        message.textContent = `Do you want to Auto-Assign credentials for` + ` ${data_name}. The auto-generated credentials will be sent to the email address provided.` 
+        modal_left_button.textContent = "Send"
+        modal_right_button.textContent = "Cancel"
+        form.style.display = 'block'
+        form.action = `/quickstart/assignadmin/` + `${value}/`
+        delete_buttons.style.display ='none'
+
+        } else {
+        form.style.display = 'none'
+        delete_buttons.style.display ='block'
+        message.textContent = `Please Send Reminder To Hospital ${object_name} User OR Complete Registration Yourself!`
+        modal_left_button.textContent = "Send Reminder"
+        modal_right_button.textContent = "Complete Manually"
+        }
+        
+      
+    }
+
+    function assignLinkPhysician(event) {
+        console.log(event.currentTarget)
+        var value = event.currentTarget.getAttribute('data-id')
+        var idName = `object-${value}`
+        var modal_left_button = document.getElementById('modal_left_button')
+        var modal_right_button = document.getElementById('modal_right_button')
+        var message = document.getElementById("modal-message-inner")
+        var object_name = document.getElementById(idName).textContent
+       
+        {% if action == 'delete' %}
+        message.textContent = `Do you want to delete the record for` + "{{obj_type}}" + `${object_name}`
+        {% else %}
+        message.textContent = `Please Send Reminder To Hospital ${object_name} User OR Complete Registration Yourself!`
+        {% endif %}
+        modal_left_button.href = `/register/remove/` + "{{obj_type}}/" + `${value}/`
+      
+    }
+
+</script>
+
+{% endblock %}

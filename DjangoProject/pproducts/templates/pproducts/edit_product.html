@@ -1,0 +1,102 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+
+
+<link rel="stylesheet" href="{% static 'pproducts/addphysician.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+#id_shop_recovery_id {
+  width:10vw;
+}
+#shop-recovery-id-container {
+  display:none;
+ 
+}
+
+#id_specialties {
+  width:20vw;
+}
+
+#select-box-toowoo {
+  margin-left: 1vw;
+}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<form class="form" method="POST" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="container-title">
+       
+        <div class="form__title">{{header}}
+          {% if new %}
+          <a style="font-size:1.3rem;color:brown" href="{% url 'pproducts:removeProduct' product_id %}">Delete Product - </a>
+          {% endif %}
+        </div>
+
+        <p class="form__desc">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, nostrum? Laudantium molestiae explicabo numquam animi corrupti debitis ratione, accusamus nemo optio eum vero nesciunt facere aperiam! Labore pariatur accusantium exercitationem.
+        {% if form.non_field_errors %}
+        <ul>
+          {% for error in form.non_field_errors %}
+          <li style="color:red">{{error}}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+       
+    </div>
+    {% comment %}
+    <select onchange="populateDropDown(event)" name="pushtoowoo1" id="select-box-toowoo">
+      <option value="" selected>Push To Woo Commerce</option>
+      <option value="create">Create Product</option>
+      <option value="update">Update Product</option>
+      <option value="no_push">Do Not Push</option>
+    </select>
+    {% endcomment %}
+    {% for field in form %}
+    <div class="form__item">
+      {% if field.name == 'shop_recovery_id' %}
+      <div id="shop-recovery-id-container">
+        <label for="givennames" class="form__label">{{field.label}}</label>
+        <br>
+        {{field}}
+      </div>
+      {% else %}
+      <label for="givennames" class="form__label">{{field.label}}</label>
+      {{field}}
+      {% endif %}
+      {% if form.errors %}
+      <span class="form__error">{{field.errors}}</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="form__item">
+      <button class="form__btn" type="submit">{% if button %} {{button}} {% else %} {{header}} {% endif %}</button>
+    </div>
+  </form>
+
+  <script>
+    function populateDropDown(event) {
+      var pushToWoo = event.target.value
+      shoprecoveryID = document.getElementById("shop-recovery-id-container")
+      if (pushToWoo == 'update') {
+        shoprecoveryID.style.display = 'block'
+      } else {
+        shoprecoveryID.style.display = 'none'
+      }
+    }
+  </script>
+
+
+{% endblock %}

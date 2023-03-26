@@ -1,0 +1,61 @@
+Applications:
+
+
+Details:
+
+1)
+
+Support:
+
+1) Contains Create views for products,physicians,hospitals, and specialties. Also contains
+DownloadXLS which downloads results in xlsx format.
+
+Register:
+
+1) contains edit views for hospital, physician,product, and specialties
+
+2) contains the remove object views for each entity.
+
+Dashboard:
+
+1) contains dashboard for master and regular user. 
+Contains function to add incomoplete profile information by clicking in the link under the table
+
+/dashboard/
+
+    path('master/main/', views.master_dashboard, name="master_dashboard"),
+    path('staff/main/', views.dashboard, name="dashboard"),
+    path('test/',views.test,name='f'),
+    path('update/info/<int:id>/',view=views.updateInformationUser,name="updateInfo")
+
+
+QuickStart:
+
+1) Contains QuickStart Sign Up for physicians and hospitals, Token Validation, QuickStart email 
+for hospitals and physicians. 
+
+Urls
+
+Pproducts 
+
+1) Contains the Models and ModelForm's for Products,Physician,LinkedProductTags, and ProductTags, and Product Images
+
+No Urls
+
+Medical
+
+1) Contains the Models and Modelform for Hospital
+
+2) No Url's
+
+Login 
+
+1) Contains UserProfileAdmin which is automatically created upon creating of a user.
+
+2) No Url's
+
+superuseractions
+
+1) Contains User History Table and Quick Invite Log records for models.
+
+2) No Urks

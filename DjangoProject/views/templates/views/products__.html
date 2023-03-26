@@ -1,0 +1,523 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res">
+				{% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="w-100">All Products <a href="{% url 'views:viewProductList' %}">List View Products</a> <a href="{% url 'views:view_specialties' %}">List View Specialties</a></h2>
+                        </div>
+                    </div>
+                    <!-- start filter -->
+                    <div class="row py-3 filter">
+                        
+                        <div class="col-md-4" {% if not request.user.is_superuser %} style="pointer-events:none;opacity:0.3;" {% endif %}>
+                            <label>Facility</label> 
+                            <select id="hospital_box" name="hospital_box" onchange="filterPhysicians(event)">
+                                <option value="" selected>Please Select A Facility</option>
+								{% for hospital in hospitals %}
+                                <option value="{{hospital.id}}">{{hospital.name}}</option>
+								{% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label>Physician</label> 
+                            <select id="select-physician-id" name="physician_box" onchange="filterSpecialties(event)">
+								<option value="" selected>Please Select A Physician</option>
+                                <option value="all">All</option>
+								{% for physician in physicians %}
+                                <option value="{{physician.id}}">{{physician.get_full_name}}</option>
+								{% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Specialty</label> 
+                            <select id="selectboxspecialty">
+								<option value="" selected>Please Select A Specialty</option>
+                                <option  value="all">All</option>
+								{% for specialty in specialties %}
+                                <option value="{{specialty.getTag}}">{{specialty.tag}}</option>
+								{% endfor %}
+                            </select>
+                        </div>
+						<button style="margin-left:40vw;height:4.7vh;padding:7px 7px;position: absolute;left:33vw;top:9vh;background-color: #0fa942;color: whitesmoke;" onclick="buildProductCards(event)">Update</button>
+                    </div>
+                    <!-- end filter -->
+                    <!-- start products wrapper -->
+                    <div class="row py-4">
+                        <div class="col-12">
+                            <ul class="nav nav-tabs body_part_tab" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <button onclick="switchView(event)" value='current' class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">Current</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button onclick="switchView(event)" value="all" class="nav-link" id="current-tab" data-bs-toggle="tab" data-bs-target="#current" type="button" role="tab" aria-controls="current" aria-selected="false" {% if opacity %} style="opacity:1.0;pointer-events: auto;"   {% else %} style="opacity:0.3;pointer-events: none;" {% endif %}>All</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content py-3" id="myTabContent">
+                                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                                    <!-- start product cards -->
+                                    <div class="row" id="productsRow">
+										{% comment %}
+                                        <div class="col">
+                                            <div class="card h-100">
+                                                <div class="body_part">Shoulder</div>
+                                                <img src="images/cryo_shoulder_brace.webp" class="card-img-top" alt="CRYO SHOULDER BRACE + COMPRESSION">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">CRYO SHOULDER BRACE + COMPRESSION</h5>
+                                                    <p class="card-text">G-Force Shoulder Braces help patients overcome shoulder pain and swelling.</p>
+                                                    <div class="price">$89.99</div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted"><a href="" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+                                                </div>
+                                            </div>
+                                        </div>
+										
+                                        <div class="col">
+                                            <div class="card h-100">
+                                                <div class="body_part">Shoulder</div>
+                                                <img src="images/Rehab_Bands.jpg" class="card-img-top" alt="Rehab Bands">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Rehab Bands</h5>
+                                                    <p class="card-text">A superior band product for resistance training and rehabilitation, provides both positive and negative force on muscles</p>
+                                                    <div class="price">$12.00</div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted"><a href="#" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100">
+                                                <div class="body_part">Shoulder Repair</div>
+                                                <img src="images/ossur_cold_therapy.jpg" class="card-img-top" alt="Ossur Cold Therapy (SHOULDER)">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Ossur Cold Therapy (SHOULDER)</h5>
+                                                    <p class="card-text">Cold Rush’s holistic design features a durable motor, a stronger flow rate then the top selling units and an industry-leading ice-to-water ration that ensures longer cooling times.</p>
+                                                    <div class="price">$179.99</div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted"><a href="#" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card h-100">
+                                                <div class="body_part">Shoulder</div>
+                                                <img src="images/slingshirt-495-500x281.jpg" class="card-img-top" alt="Shoulder Breakaway Shirt">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Shoulder Breakaway Shirt</h5>
+                                                    <p class="card-text">You’ll find the size you need on SlingShirt.com. SlingShirts are the perfect shoulder surgery clothing solution because it utilizes strong magnets that make getting dressed and undressed a breeze.</p>
+                                                    <div class="price">$50.00</div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <small class="text-muted"><a href="#" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+                                                </div>
+                                            </div>
+                                        </div>
+										{% endcomment %}
+                                    </div>
+                                    <!-- end product cards -->
+                                </div>
+                                <div class="tab-pane fade" id="current" role="tabpanel" aria-labelledby="current-tab">
+									
+									<!--  -->
+									{% comment %}
+									<div class="col" id="columnAllProducts">
+                                        <div class="card h-100" style="border:2px solid green">
+											<div>
+												<p style="color:green;font-size: 1.3rem;">Currently Recommending &#x2713;</p>
+											</div>
+                                            <div class="body_part">Shoulder</div>
+                                            <img src="images/slingshirt-495-500x281.jpg" class="card-img-top" alt="Shoulder Breakaway Shirt">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Shoulder Breakaway Shirt</h5>
+                                                <p class="card-text">You’ll find the size you need on SlingShirt.com. SlingShirts are the perfect shoulder surgery clothing solution because it utilizes strong magnets that make getting dressed and undressed a breeze.</p>
+                                                <div class="price">$50.0011</div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <small class="text-muted"><a href="#" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+                                            </div>
+                                        </div>
+									</div>
+									{% endcomment %}
+									
+									<!--  -->
+									
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end products wrapper -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Start Footer -->
+<!-- Modal -->
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal Popup -->
+
+<script src="{% static 'pproducts/products.js' %}"></script>
+<script>
+function switchView(event) {
+	var value = event.target.value
+
+	if (value == 'all') {
+
+	} else {
+
+	}
+}
+function filterPhysicians(event) {
+
+// var outercont = document.getElementById('outer-cont-holder');
+var facility_id = event.target.value
+
+var selectPhysician = document.getElementById("select-physician-id");
+var selectBoxSpecialty = document.getElementById('selectboxspecialty')
+
+var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+var json_obj = {}
+json_obj['facility'] = facility_id;
+// json_obj['specialty'] = selectBoxSpecialty.value
+// json_obj['physician'] = selectPhysician.value
+var callbackURL = "/pproducts/filter/hospital/"
+$.ajax({
+	type: 'POST',
+	headers: { "X-CSRFToken": csrf_token },
+	dataType: "json",
+	data: json_obj,
+	url: callbackURL,
+	// Receiving JSON Response Back from DB
+	success: function(response) {
+		console.log(response)
+
+		if (response.dataset) {
+			console.log(response.dataset)
+			var dataset = response.dataset
+			var outerContainer = document.getElementById("select-box-child2");
+			
+			rebuildSelections(dataset,'select-physician-id','Physician')
+			rebuildSelections(response.specialties,'selectboxspecialty','Specialty')
+
+			return
+	  }
+		
+	},
+	error: function() {
+	console.log('error')
+	}
+})
+return
+}
+
+
+
+function toggleAllorCurrent() {
+	var physician = document.getElementById('select-physician-id').value
+	var specialty = document.getElementById('selectboxspecialty').value
+	json_obj = {'physician':physician,'specialty':specialty}
+	var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+	var callbackURL = '/views/toggle/view/'
+
+	$.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+		console.log('response',response)
+		if (response) {
+			
+
+			toggleAllorCurrentDisplay(dataset=response.dataset)
+			
+		}
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+	
+}
+
+
+
+function toggleAllorCurrentDisplay(dataset='') {
+	
+	if (dataset) {
+        console.log('dataset',dataset)
+		var allContainer = document.getElementById('current')
+		// allContainer.innerHTML = ""
+		for (let i in dataset) {
+			console.log
+			if (dataset[i][3])  {
+				var recommending = `
+				<div class="card h-100 allviewCards" style="border:2px solid green">
+						<div>
+							<p style="color:green;font-size: 1.3rem;">Currently Recommending &#x2713;</p>
+						</div>`
+			} else {
+				var recommending = `
+				<div class="card h-100 allviewCards">`
+			}
+			var URL = '/register/edit/product/' + `${dataset[i][0]['id']}/`
+			var HTML = `
+				<div class="col colAll" id="columnAllProducts-${i}">
+						${recommending}
+						<div class="body_part">${dataset[i][2]}</div>
+						<img src="${dataset[i][1]}" class="card-img-top" alt="Shoulder Breakaway Shirt">
+						<div class="card-body">
+							<h5 class="card-title">${dataset[i][0]['name']}</h5>
+							<p class="card-text">${dataset[i][0]['short_description']}</p>
+							<div class="price">$50.0011</div>
+						</div>
+						<div class="card-footer">
+							<small class="text-muted"><a href="${URL}" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>Add Product</a></small>
+						</div>
+					</div>
+				</div>`
+
+			allContainer.insertAdjacentHTML('beforeend',HTML)
+
+			}
+			console.log(allContainer)
+		var alltab = document.getElementById('current-tab')
+		if (dataset.length > 0) {
+			
+			alltab.style.pointerEvents = 'auto'
+			alltab.style.opacity = "1"
+		} else {
+			alltab.style.pointerEvents = 'none'
+			alltab.style.opacity = "0.3"
+		}
+	}
+}
+
+function filterSpecialties(event) {
+	var physician_id = event.target.value
+	var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+	json_obj = {'physician':physician_id}
+	var callbackURL = '/views/filter/physician/'
+
+	$.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+
+		if (response) {
+			var dataset = response.dataset
+			rebuildSelections(dataset,'selectboxspecialty','Specialty')
+		}
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+
+}
+
+
+
+
+function rebuildSelections(dataset,id='',label='',flag=false) {
+    var select = document.getElementById(id);
+    select.innerHTML = "";
+    var option = document.createElement('option');
+    option.value = "";
+    option.selected = true;
+    option.textContent = `Please Select a ${label}`
+    select.appendChild(option)
+    var option2 = document.createElement('option');
+    option2.value = "all";
+    option2.selected = false;
+    option2.textContent = "All"
+    select.appendChild(option2)
+    console.log(dataset)
+    if (label == 'Physician') {
+	
+		for (var i = 0; i < dataset.length; i++) {
+			var HTML = `<option value=${dataset[i][0]} id="nametitle-physician" name="physician"> ${dataset[i][1]}  ${dataset[i][2]}</option>`
+			select.insertAdjacentHTML('beforeend', HTML)
+			
+		}
+   } else {
+		for (var i = 0; i < dataset.length; i++) {
+			var HTML = `<option value=${dataset[i][1].split(" ").join("_")} id="nametitle-specialty-${i}" name="physician"> ${dataset[i][1]} </option>`
+			select.insertAdjacentHTML('beforeend', HTML)
+		}
+   }
+  }
+
+  function buildProductCards(event) {
+	event.preventDefault()
+	console.log("hello")
+	var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+   
+	var hospital_selection =	document.getElementById('hospital_box').value
+   
+	var physician_selection = 	document.getElementById('select-physician-id').value
+	var specialty_selection =	document.getElementById('selectboxspecialty').value
+    specialty_selection = specialty_selection.split("_").join(" ")
+	json_obj = {'hospital':hospital_selection,'physician':physician_selection,'specialty': specialty_selection}
+	console.log("print",specialty_selection)
+	var callbackURL = '/views/build/productcards/'
+	$.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+
+		console.log(response)
+		if (response) {
+			buildCardsInternal(data=response.dataset)
+
+			if (response.buildAll) {
+				console.log("hello")
+				toggleAllorCurrent()
+			}
+				
+		}
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+  }
+
+  function buildCardsInternal(dataset='') {
+	if (dataset) {
+            console.log("dataset",dataset)
+			var productsRow = document.getElementById('productsRow')
+			productsRow.innerHTML = ""
+			
+			
+			for (let product of dataset) {
+				var URL = '/register/edit/product/' + `${product[0]['id']}/`
+	
+
+				var HTML = `<div class="col">
+								<div class="card h-100">
+									<div class="body_part">${product[2]}</div>
+									<img src="${product[1]}" class="card-img-top" alt="${product[0]['name']}">
+									<div class="card-body">
+										<h5 class="card-title">${product[0]['name']}</h5>
+										<p class="card-text">${product[0]['short_description']}</p>
+										<div class="price">$89.99</div>
+									</div>
+									<div class="card-footer">
+										<small class="text-muted"><a href="${URL}" class="float-left"><i class="fa-solid fa-pen-to-square"></i> Edit</a><a href="#" class="float-right"> <i class="fa-solid fa-plus"></i>More Details</a></small>
+									</div>
+								</div>
+							</div>`
+
+				productsRow.insertAdjacentHTML('beforeend',HTML)
+			}
+
+			return
+				
+		}
+  }
+
+
+  function boilerplateJavascript(event) {
+  // POST request must account for the CSRF TOKEN to Prevent Cross-Site-Request-Forgery
+  var _csrf_token = document.querySelector("input[type=hidden]").value;
+  var json_obj = {"Test": 15}
+  var callbackURL = ""
+  
+  $.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+}
+
+
+// function toggleAllorCurrent1(event) {
+
+// 	var physician_id = event.target.value
+// 	var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+// 	json_obj = {'physician':physician_id}
+// 	var callbackURL = '/views/filter/physician/'
+
+// 	$.ajax({
+//       type: 'POST',
+//       headers: { "X-CSRFToken": csrf_token },
+//       dataType: "json",
+//       data: json_obj,
+//       url: callbackURL,
+//       // Receiving JSON Response Back from DB
+//       success: function(response) {
+//         // Write Javascript function here
+
+// 		if (response) {
+// 			var dataset = response.dataset
+// 			rebuildSelections(dataset,'selectboxspecialty','Specialty')
+// 		}
+//       },
+//       error: function() {
+//       console.log('error')
+//     }
+//   })
+
+// }
+</script>
+
+{% endblock %}

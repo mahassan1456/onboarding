@@ -1,0 +1,120 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Page to Add a New Product  -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+        <!-- Start Recommended Products Section -->
+        <div class="container login_signup_wrap">
+            <div class="row">
+                <div class="col-md-12 col-12 mx-auto">
+                    <h1>Edit Product</h1>
+                </div>
+            </div>
+            <!-- start filter -->
+            <div class="row">
+                <div class="col-md-4 filter mx-auto">
+                    <label>Action</label> 
+                    <select required>
+                        <option>Push To WooCommerce</option>
+                        <option>New Product</option>
+                        <option>Update Product</option>
+                        <option>Do Not Push</option>
+                    </select>
+                </div>
+            </div>
+            <!-- end filter -->	 
+        </div>
+        <div class="container login_signup_wrap">
+            <div class="row">
+                <div class="col-md-12 col-12 mx-auto">
+                    <div class="login_wrap">
+                        <form class="py-4 needs-validation">
+                            <div class="row">
+                                <div class="form-group has_input_icon col-md-12">
+                                    <img src="images/cryo_shoulder_brace.webp" class="card-img-top" alt="CRYO SHOULDER BRACE + COMPRESSION"> 
+                                </div>
+                                <div class="form-group has_input_icon col-md-12">
+                                    <label>Please Upload Product Picture</label>
+                                    <input class="form-control" type="file" id="formFile"> 
+                                </div>
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Product Name</label> 
+                                    <input type="text" name="Product Name" value="CRYO SHOULDER BRACE + COMPRESSION" class="form-control">
+                                </div>
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Product Price</label> 
+                                    <input type="text" name="Product Price" value="$89.99" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group has_input_icon col-md-6">
+                                    <label class="my-3">Product Short Description</label>
+                                    <textarea id="product_short_description" name="Product Short Description" rows="5" cols="20"><p>G-Force Shoulder Braces help patients overcome shoulder pain and swelling, whether it is chronic shoulder pain, post-surgical swelling, or post-exercise swelling and soreness. All braces are designed to help reduce inflammation & discomfort, as well as provide compression & immobilization.</p></textarea>
+                                </div>
+                                <div class="form-group has_input_icon col-md-6">
+                                    <label class="my-3">Product Long Description</label>
+                                    <textarea id="product_long_description" name="Product Long Description" rows="5" cols="20"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Quantity</label> 
+                                    <input type="number" name="quantity" min="0" value="1" id="id_quantity" class="form-control">
+                                </div>
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Category</label> 
+                                    <input type="text" name="Category" value="Shoulder Repare" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Manufacturer</label> 
+                                    <input type="text" name="Manufacturer" value="CRYO" class="form-control">
+                                </div>
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>UPC</label> 
+                                    <input type="text" name="UPC" value="" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>Specialties</label>
+                                    <select name="specialties" id="id_specialties" multiple="" class="form-control">
+                                        <option>Hip</option>
+                                        <option>Knee</option>
+                                        <option>Shoulder</option>
+                                        <option>Shoulder Repare</option>
+                                    </select>
+                                </div>
+                                <div class="form-group has_input_icon col-md-6 col-12">
+                                    <label>SKU</label> 
+                                    <input type="text" name="SKU" value="" class="form-control"><button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Update Product</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Recommended Products Section -->	 
+        <script>
+            $(document).ready(function () {
+            	$("#accordion li > h4").click(function () {
+            
+            		if ($(this).next().is(':visible')) {
+            			$(this).next().slideUp(300);
+            			$(this).children(".plusminus").text('+');
+            		} else {
+            			$(this).next("#accordion ul").slideDown(300);
+            			$(this).children(".plusminus").text('-');
+            		}
+            	});
+            });
+            
+        </script>	
+        <!-- End Accordian JS -->
+{% endblock %}

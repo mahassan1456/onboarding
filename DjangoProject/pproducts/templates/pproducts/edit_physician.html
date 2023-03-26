@@ -1,0 +1,270 @@
+{% extends 'medical/base2.html' %}
+
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'pproducts/addphysician.css' %}" type="text/css">
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i&display=swap");
+
+
+a {
+  color:blue;
+}
+
+a:hover {
+
+  color:rgb(71, 71, 255);
+  
+}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<form enctype="multipart/form-data" class="form" method="POST" novalidate>
+    {% csrf_token %}
+    <!-- Header Form Title -->
+    <input type="hidden" name="edit" value="1">
+    <div class="container-title">
+        <div class="form__title">{{header}}</div>
+        <p class="form__desc">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, nostrum? Laudantium molestiae explicabo numquam animi corrupti debitis ratione, accusamus nemo optio eum vero nesciunt facere aperiam! Labore pariatur accusantium exercitationem.
+        </p>
+    </div>
+    
+    <!-- Form Body/Fields -->
+    {% for field in form %}
+    <!-- Account for Product_Tags field which has additional functionality -->
+    {% if field.name == 'specialty_ph' %}
+    <div class="form__item tags_select" id="tags_select" style="display:block;">
+    {% else %}
+    <div class="form__item">
+    {% endif %}
+  
+      {% if field.name == 'specialty_ph' %}
+      <div>
+        <label for="givennames" class="form__label">{{field.label}}</label>
+        <button id="specialty_button_refresh" onclick="refreshProducts2(event)" type="submit">Refresh</button>
+        <button id="specialty_button_refresh" onclick="refreshProducts2(event)" value="clear" type="submit">Clear</button>
+        <label for="givennames" class="form__label product-label">Products</label>
+      </div>
+      {% else %}
+      <label for="givennames" class="form__label">{{field.label}}</label>
+      {% endif %}
+      {% if field.name == 'specialty_ph' %}
+      <div class="f11">
+      {{field}}
+      {% else %}
+      {{field}}
+      {% endif %}
+      {% if form.errors %}
+      <span class="form__error">{{field.errors}}</span>
+      {% endif %}
+      {% if field.name == 'specialty_ph' %}
+  
+      <div name="specialty_selected" id="id_select_box8" class="x2" multiple="">
+      {% for specialty,products in editproductslist.items %}
+      <div>
+        <div class="expandbox">
+          <p class="xp23" id="{{specialty|lower}}">{{specialty|title}}</p>
+          <span class="collapse-icon" onclick="addEventsDropDown(event)">+</span>
+      </div>
+      <div></div>
+      <fieldset id="t1" class="xp24" style="display:none;" name="xp12">
+          {% for product in products %}
+          <div class="qp">
+              <div>
+                  <label for="{{specialty}}{{product.0.id}}"> <h6 style="display:inline;"><span class="bullet">•</span><strong> Name: </strong></h6> <a style="color:blue;" href="{% url 'pproducts:product2physician' product.0.id %}?specialty={{specialty}}">{{product.0.name}}</a></label>
+                  <div class="description">
+                    <br>
+                    <span class="description-product"> <h6 style="display:inline;"><strong> Description: </strong> </h6> {{product.0.description}} </span>
+                  </div>
+                  <a class="additionalinfo" style="color:blue;" onclick="additionalInfo(event)">&nbsp;| More </a>
+              </div>
+              <input id="{{specialty}}{{product.0.id}}"  value="{{product.0.id}}" type="checkbox" name="prod-{{specialty}}" hip="" {{product.1}}>
+              {% comment %}
+              {% if product.id in prod_list_ids %}
+              <input id="{{specialty}}{{product.0.id}}"  value="{{product.0.id}}" type="checkbox" name="prod-{{specialty}}" hip="" checked>
+              {% else %}
+              <input id="{{specialty}}{{product.0.id}}"  value="{{product.0.id}}" type="checkbox" name="prod-{{specialty}}" hip="" checked>
+              {% endif %}
+              {% endcomment %}
+          </div>
+          <br>
+          {% endfor %}
+      </fieldset>
+    </div>
+    {% endfor %}
+    </div>
+   </div>
+  {% endif %}
+  </div>
+  {% endfor %}
+ 
+    
+  <div class="form__item">
+    <button class="form__btn" type="submit" id="sbtbutton">{{button_text}}</button>
+  </div>
+  <!-- Closing Form Tag -->
+  </form>
+  
+<script>
+  
+function addEventsDropDown(event) {
+  var fieldset = event.target.parentNode.nextElementSibling.nextElementSibling;
+  var collapseIcon = event.target.parentNode.lastElementChild;
+  if (fieldset.style.display === 'none') {
+    fieldset.style.display = 'block';
+    collapseIcon.textContent = "_";
+  } else {
+    fieldset.style.display = 'none';
+    collapseIcon.textContent = "+";
+  }
+     ;
+    
+  }
+
+  function refreshProducts2(event) {
+      
+      // In order to submit a POST ajax request the button must be in a form. If the button is not the actual submit button a function
+      // must be called on the event to prevent the default behavior of form submission   
+          event.preventDefault();
+          var id_select_box8 = document.getElementById("id_select_box8");
+          if (event.target.value == 'clear') {
+            id_select_box8.innerHTML = ""
+            var inputs = document.querySelectorAll("input[type=checkbox]:checked");
+          
+            for (let checkbox of inputs) {
+              checkbox.checked = false
+            }
+            return;
+          }
+          var token = document.querySelector("input[type=hidden]").value;
+          // var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+          // remove maybe
+          var id_select_box2 = document.getElementById("id_select_box2");
+          // if issues changes below id_select_box2 to document
+          var checkboxes = id_select_box2.querySelectorAll('input[type=checkbox]:checked');
+          // remove maybe
+        
+          var xp23 = document.getElementsByClassName('xp23');
+          // extracting the text content form the right box to see all the products currently selected on the left
+          xp23 = Array.from(xp23, (x) => x.textContent.toLowerCase())
+          console.log("array after extrcting text content", xp23)
+          // strip the left box which represents the new state of checkboxes
+          var newSelections = Array.from(checkboxes, (x) => x.parentElement.textContent.replace(/[\n\r]+|[\s]{2,}/g, ' ').trim().toLowerCase())
+          var json_obj = {};
+          var callbackURL = '/pproducts/refresh/';
+          // check if any of the checkboxes are currently selected. if len is 0 then nothing is selected
+           if (checkboxes.length > 0) {
+          console.log("ttttt")
+          var commonElements = xp23.filter(val => newSelections.includes(val))
+        
+          // if there no common elements then nothing from the right box needs to be kept so clear
+          if (xp23.length == 0 || commonElements.length == 0) {
+            
+            id_select_box8.innerHTML = "";
+            json_obj['lookup'] = newSelections;
+
+          } else {
+            // we have checked the condition where no common elements exist so there are some common elements which exist now we need to check for the difference between any new selections
+            var difference = newSelections.filter(val => !xp23.includes(val))
+            json_obj['lookup'] = difference; 
+              if (commonElements.length != xp23.length ) {
+                var removal = xp23.filter(val => !newSelections.includes(val))
+                
+                console.log('removal',removal[0])
+                console.log(removal[0] == 'eye')
+              
+                for (var i = 0; i < removal.length; i++) {
+                      console.log(removal[i])
+                      // The below DOeS NOT WORK EVEN THOUGH IT IS THE VALUE 'eye'
+                      var removedElement = document.getElementById(removal[i])
+                      // var removedElement = document.getElementById('eye')
+                      // console.log('removedelement',removedElement)
+                      // var fieldsetremoved = removedElement.parentElement.nextElementSibling.nextElementSibling
+                      var fieldsetremoved = removedElement.parentElement.parentElement
+                      fieldsetremoved.remove()
+                      // removedElement.parentElement.remove()
+                }
+            }
+          }
+            $.ajax({
+              type: 'POST',
+              headers: { "X-CSRFToken": token },
+              dataType: "json",
+              data: json_obj,
+              url: callbackURL,
+              // Receiving JSON Response Back from DB
+              success: function(response) {
+
+                if (response) {
+                  
+                  var products = response.dataset
+                  for (var specialty in products) {
+                    var parentContainer = document.createElement('div')
+                    id_select_box8.appendChild(parentContainer)
+                    idselecttext = ` <div class="expandbox">
+                                        <p class="xp23" data-t="${specialty.toLocaleLowerCase()}" id="${specialty.toLowerCase()}">${specialty.toUpperCase()}</p>
+                                        <span class="collapse-icon" onclick="addEventsDropDown(event)">+</span>
+                                      </div>
+                                      <div></div>
+                                      <fieldset class="xp24" style="display:none;" name="xp12"></fieldset>`
+                                     
+                      parentContainer.insertAdjacentHTML('beforeend', idselecttext)
+                      var fieldset = parentContainer.lastElementChild;
+                      
+                      for (var product in products[specialty]) {
+                          var prod = products[specialty][product]
+                          fieldsettext =
+                          `<div class="qp">
+                              <div>
+                                  <label for=${specialty+prod.id}> <h6 style="display:inline;"><span class="bullet">&#x2022;</span><strong> Name: </strong></h6> ${prod.name} </label>
+                                  <div class="description">
+                                    <br>
+                                    <span class="description-product"> <h6 style="display:inline;"><strong> Description: </strong> </h6> ${prod.description} </span>
+                                  </div>
+                                  <a class"additionalInfo" style="color:blue;" onclick="additionalInfo(event)">&nbsp| More </a>
+                              </div>
+                              <input id=${specialty+prod.id} value=${prod.id} type="checkbox" name=prod-${specialty}>
+                          </div>
+                          <br>`
+                        fieldset.insertAdjacentHTML('beforeend',fieldsettext)
+                        }
+                      }
+                  }
+               },
+               error: function() {
+                console.log('error')
+              }
+            })
+          } else {
+            id_select_box8.innerHTML = "";
+          }
+        }
+
+function populateExistingProducts(event) {
+  return
+}
+function additionalInfo() {
+  var element = event.target;
+  console.log(element.class)
+  if (element.previousElementSibling.style.display == 'inline') {
+    element.previousElementSibling.style.display = 'none';
+    element.textContent = " | More";
+  } else {
+    element.previousElementSibling.style.display = 'inline';
+    element.textContent = " | Less";
+  }
+}
+
+</script>
+
+{% endblock %}

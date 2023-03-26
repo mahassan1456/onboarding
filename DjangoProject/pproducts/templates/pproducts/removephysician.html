@@ -1,0 +1,103 @@
+{% extends 'medical/base2.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{block.super}}
+
+<style>
+
+.buttons {
+
+border-radius: 8px;
+}
+
+#approvecontainer {
+
+margin: 5vh 0;
+text-align:center;
+border:0.5px solid inset;
+
+position:relative;
+height:60vh;
+width:45vw;
+left:27.5vw;
+border-radius:8px;
+box-shadow: 5px 10px #e8fbff;
+
+}
+
+body {
+
+}
+
+#button-container {
+
+margin-top:4vh;
+
+}
+
+.form__btn {
+font-family: "Source Sans Pro", sans-serif;
+font-weight: 600;
+font-size: 1.1em;
+padding: 10px 16px;
+margin: 10px 0;
+
+color: #ffffff;
+background: #14b64a;
+border: 2px solid #0fa942;
+border-radius: 5px;
+
+cursor: pointer;
+outline: none;
+}
+#leftbutton {
+
+margin-right: 5vw;
+
+}
+
+#rightbutton {
+background-color:rgb(211, 205, 205)
+}
+
+button {
+
+background-color:rgb(211, 205, 205)  
+ 
+}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+{% comment %}
+<h3>Are you sure you want to remove the selected physician First {{physician.firstName}} Last {{physician.lastName}} @ Facility {{physician.facility.name}}</h3>
+<form method="POST">
+    <input type="submit" value="Remove" name="approval">
+    <input type="submit" value="" name="approval">
+</form>
+{% endcomment %}
+
+
+
+<div id="approvecontainer">
+    <form  method="post">
+
+        {% csrf_token %}
+        <p>{{label}}</p>
+
+        <div id="button-container">
+            <a><button type="submit" name="approval" class="form__btn" value="1" id="leftbutton">Remove</button></a>
+            <button class="form__btn" id="rightbutton" type="submit" name="approval" value=""> Cancel </button>
+        </div>
+
+    </form>
+</div>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,145 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Product Detail Page -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+<!-- Start Recommended Products Section -->
+
+
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="product_image_large border">
+				<img id="main-image" src="{{product.getFirstImage}}">
+			</div>
+            <div class="product_image_thumbnail">
+				{% for image in product.images.all %}
+
+				<a onclick="changeImageFront(event)"><img src="{{image.image}}"></a>
+			
+				{% endfor %}
+			</div>
+        </div>
+        <div class="col-md-8 text-left">
+            <h2>{{product.name}}</h2>
+            <div class="product_category"><strong>Category:</strong> <span>Shoulder Repare</span></div>
+            <div class="product_specialties"><strong>Specialties:</strong><span>{{product.buildSpecialtiesString}}</span></div>
+			{% for line in product.buildBullets|slice:":2" %}
+            <p>{{line | safe }}</p>
+			{% endfor %}
+			{% comment %}
+            <p>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities</p>
+			{% endcomment %}
+            <div class="price">{{product.price}}</div>
+            <div class="product_manufacturer"><small><strong>Manufacturer:</strong> ADL</small></div>
+            <div class="product_sku"><small><strong>SKU:</strong> Not Available</small></div>
+            <div class="product_qty"><small><strong>Quantity:</strong> 100</small></div>
+        </div>
+    </div>
+    <!--Start long description -->
+    <div class="row my-4">
+        <div class="col-12 text-left">
+            <ul class="a-unordered_list">
+				{% for line in product.buildBullets %}
+                <li>{{line | safe }}</li>
+				{% endfor %}
+				{% comment %}
+                <li>Designed to help users avoid bending at the hip and improve daily living, the hip kit is a variety of selected tools that are vital in assisting patients with bathing, dressing, reaching, and other activities.</li>
+                <li>A total package that is ideal for those undergoing hip, knee, and back rehabilitation.</li>
+                <li>Included in the kit are a 26″ Reacher, a contoured sponge with a 17″ Handle, a formed sock aid, and an 18″ Plastic shoehorn.</li>
+                <li>The kit is a terrific asset to those moving slowly and carefully pre- and <a href="#">post-surgery.</a></li>
+				{% endcomment %}
+            </ul>
+            <h5>
+            Product Specifications</h2>	
+            <div class="table_wrapper">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Ean</th>
+                            <td>0714905049766</td>
+                        </tr>
+                        <tr>
+                            <th>Global Trade Identification Number</th>
+                            <td>00714905049766</td>
+                        </tr>
+                        <tr>
+                            <th>Height</th>
+                            <td>36 inches</td>
+                        </tr>
+                        <tr>
+                            <th>Included Components</th>
+                            <td>Hip Kit</td>
+                        </tr>
+                        <tr>
+                            <th>Length</th>
+                            <td>6 inches</td>
+                        </tr>
+                        <tr>
+                            <th>Model Number</th>
+                            <td>86-0074</td>
+                        </tr>
+                        <tr>
+                            <th>Number of Items</th>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <th>Part Number</th>
+                            <td>86-0074</td>
+                        </tr>
+                        <tr>
+                            <th>Size</th>
+                            <td>26″ Reacher, Plstc Shoehorn</td>
+                        </tr>
+                        <tr>
+                            <th>Style</th>
+                            <td>With Formed Sock Aid, Sponge</td>
+                        </tr>
+                        <tr>
+                            <th>UNSPSC Code</th>
+                            <td>42000000</td>
+                        </tr>
+                        <tr>
+                            <th>UPC</th>
+                            <td>714905049766</td>
+                        </tr>
+                        <tr>
+                            <th>Width</th>
+                            <td>6 inches</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--End long description -->	
+</div>
+<script>
+
+	function changeImageFront(event) {
+		var newSRC = event.target.src
+		var main = document.getElementById('main-image')
+		main.src = newSRC
+
+	}
+
+
+	$(document).ready(function () {
+		$("#accordion li > h4").click(function () {
+	
+			if ($(this).next().is(':visible')) {
+				$(this).next().slideUp(300);
+				$(this).children(".plusminus").text('+');
+			} else {
+				$(this).next("#accordion ul").slideDown(300);
+				$(this).children(".plusminus").text('-');
+			}
+		});
+	});
+	
+	</script>	
+{% endblock %}

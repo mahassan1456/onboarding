@@ -1,0 +1,55 @@
+
+<div id="parent-container">
+    <form action="" method="post" novalidate>
+
+        {% csrf_token %}
+
+        <div id="header-form-container">
+            <div class="header-form" id="header-form-single">
+
+                    <h1 id="header-form-text">{{header}}</h1>
+                
+            </div>
+        </div>
+
+        <div id="form-body-container">
+            
+                {% for field in form %}
+
+                <div class="form-body">
+                
+                    {{field.errors}}
+
+                    <div class="form-elements label">{{field.label}}</div>
+
+                    <div class="form-elements input">{{field}}</div>
+
+                </div>
+
+                {% endfor %}
+            
+        </div>
+                <div>
+                    <input type="submit" class="form-elements" value="submit">
+                </div>
+
+            
+
+        
+        
+        <div id="form-footer-container">
+
+            <div id="form-footer">
+
+                <div id="form-footer-text">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+

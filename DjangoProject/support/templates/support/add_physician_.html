@@ -1,0 +1,144 @@
+{% extends 'register/base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+{{block.super}}
+
+
+<link rel="stylesheet" href="{% static 'medical/reviewaccount.css' %}?version=2.6" type="text/css">
+{% comment %}
+<link rel="stylesheet" href="{% static 'quickstart/quickstartphysician.css' %}?version=1.3">
+{% endcomment %}
+<style>
+</style>
+
+{% endblock head %}
+
+{% block content %}
+
+{{form.non_field_errors}}
+
+<form class="form"style="padding:40px;" method="POST" novalidate>
+    {% csrf_token %}
+    <div class="container-title">
+        <div class="form__title" id="form_title_header">Add Physician</div>
+       
+        {% comment %}
+        {% if function == 'editprofile' %}
+        {% if not request.user.is_superuser %}
+        <a style="color:blue;" href="{% url 'medical:edit_hospital' request.user.hospital2.id %}"> Edit Facility Details  </a>
+        {% endif %}
+        {% endif %}
+        {% endcomment %}
+        <p class="form__desc">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, nostrum? Laudantium molestiae explicabo numquam animi corrupti debitis ratione, accusamus nemo optio eum vero nesciunt facere aperiam! Labore pariatur accusantium exercitationem.
+        </p>
+        {% comment %}
+        <img width="700" height="500" id="image-bottom" src="{{MEDIA_URL}}/uploads/footer_logo.png?version=4" alt="Shop Recovery Logo">
+       {% endcomment %}
+     
+    </div>
+
+    {% for field in form %}
+    <div class="form__item">
+      
+      {% if field.name == 'specialty_ph' %}
+      <label id="productformlabel" for="givennames" class="form__label">{{field.label}}</label>
+      <span id="infobox"><em> For Multiselect hold Ctrl(windows) or Cmd(mac)</em> </span>
+      {% else %}
+      <label for="givennames"  {% if field.name == 'hospital' %} style="display:none;" id="hospitalModelLabel" {% elif field.name == 'shop_recovery_id' %} id="shop_recovery_id_title" style="display: none;" {% elif field.name == 'shop_recovery_name'  %} style="display:none;" id="shop_recovery_name_title" {% elif field.name ==  'hospital_zip' %} id="newHospitalZipLabel" {% elif field.name == 'hospital_name' %} id="hospitalNameBoxLabel" {% elif field.name == 'hospital_invite' %} style="display:none;" id="hospitalInviteLabel" {% elif field.name == 'email_message' %} id="emailMessageLabel" {% endif %} class="form__label">{{field.label}}</label>
+      {% endif %}
+      {{field}}
+      {% if form.errors %}
+      <span class="form__error">{{field.errors}}</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="form__item">
+      <button class="form__btn" style="margin-top:7vh;height:8vh;width:9vw;" id="form_btn_id" id="submitButton" type="submit">{% if button %} {{button}} {% else %} {{header}} {% endif %}</button>
+    </div>
+  </form>
+
+
+<script src="{% static 'quickstart/js/functions.js' %}?version=2" ></script>
+{% comment %}
+<script>
+
+
+
+
+function populateName(event) {
+    var value = event.target.value 
+    var hospitalName = document.getElementById('hospitalNameBox')
+    if (value) {
+        hospitalName.style.display = 'none'
+        hospitalName.previousElementSibling.style.display = 'none';
+    } else {
+      hospitalName.style.display = 'block'
+      hospitalName.previousElementSibling.style.display = 'block';
+    }
+  }
+
+  function populateSelections(event) {
+    var value = event.target.value;
+    var hospital_label = document.getElementById('hospitalModelLabel');
+    var hospital_model_field = document.getElementById('hospitalModelField');
+    var hospital_name_box = document.getElementById('hospitalNameBox');
+    var hospital_name_box_label = document.getElementById('hospitalNameBoxLabel')
+    var hospitalInvite = document.getElementById('hospitalInvite')
+    var hospitalInviteLabel = document.getElementById('hospitalInviteLabel')
+    var newHospitalZip = document.getElementById('newHospitalZip')
+    var newHospitalZipLabel = document.getElementById('newHospitalZipLabel')
+
+    if (value == 'new') {
+
+      hospital_name_box.style.display = "block";
+      hospital_name_box_label.style.display = 'block'
+      newHospitalZip.style.display = 'block'
+      newHospitalZipLabel.style.display = 'block'
+      hospital_label.style.display = 'none';
+      hospital_model_field.style.display = 'none';
+      hospitalInvite.style.display = 'none';
+      hospitalInviteLabel.style.display = 'none';
+    } else if (value == 'onboarded') {
+      hospital_label.style.display = 'block';
+      hospital_model_field.style.display = 'block';
+      hospital_name_box.style.display = "none";
+      hospital_name_box_label.style.display = 'none'
+      newHospitalZip.style.display = 'none'
+      newHospitalZipLabel.style.display = 'none'
+      hospitalInvite.style.display = 'none';
+      hospitalInviteLabel.style.display = 'none';
+    } else {
+      hospitalInvite.style.display = 'block';
+      hospitalInviteLabel.style.display = 'block';
+      hospital_name_box.style.display = "none";
+      hospital_name_box_label.style.display = 'none'
+      newHospitalZip.style.display = 'none'
+      newHospitalZipLabel.style.display = 'none'
+      hospital_label.style.display = 'none';
+      hospital_model_field.style.display = 'none';
+    }
+  }
+
+  function buildEmailFields(event) {
+    var selectValue = event.target.value
+    var emailMessageValue = document.getElementById('emailmessagebox')
+    var emailMessageLabel = document.getElementById('emailMessageLabel')
+   
+
+    if (selectValue == 'custom') {
+        emailMessageValue.style.display = 'block'
+        emailMessageLabel.style.display = 'block'
+    } else {
+        emailMessageValue.style.display = 'none';
+        emailMessageLabel.style.display = 'none'
+    }
+  }
+</script>
+
+{% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'medical/base2.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{block.super}}
+
+<style>
+
+</style>
+
+
+
+{% endblock styles %}
+
+
+
+{% block content %}
+
+<form enctype="multipart/form-data" method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <p>{{form.errors}}</p>
+    {% endif %}
+
+    {{form}}
+
+    <input type="submit" name="" id="" value="Submit">
+</form>
+
+
+{% endblock %}

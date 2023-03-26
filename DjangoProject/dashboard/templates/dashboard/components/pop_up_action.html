@@ -1,0 +1,131 @@
+{% comment %}
+<td class="text-center"><a href="#" data-toggle="modal" data-hospital="{{qs_hospital.id}}" data-target="#reminder" style="color:green;pointer-events:none;"> Registered</a></td>
+<td class="text-center"><a href="#" onclick="assignLink(event)" data-toggle="modal" data-id="{{}}" data-target="#reminder" class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+{% endcomment %}
+
+<div class="modal fade" id="reminder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto" id="heading-pop">{{heading}}</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"><strong id="modal-message-inner">{{message}}</strong></p>
+            </div>
+            <form action="" method="POST" id="manual-form"  style="display:none;margin-bottom:2.5vw;margin-left:5vh;">
+                {% csrf_token %}
+                <input type="hidden" name="autocreate" value="1">
+                <div id="input-credentials" style="margin-right:10px;">
+                    {% if updateProfile %}
+                    <input style="margin-left:30px;" id="inp_box" required type="text" name="update" placeholder="Please Update Your Profile">
+                    {% else %}
+                    <input style="margin-left:30px;" required type="email" name="email" placeholder="Please Input Email Address to Auto-Assign and Email Credentials">
+                    {% endif %}
+                </div>
+                {% if updateProfile %}
+                <button style="background-color: rgb(4, 192, 4);margin-left:20px;height:25px;" name="sub_but" id="sub_but" type="submit">Update Profile  </button>
+                {% else %}
+                <button style="background-color: rgb(4, 192, 4);margin-left:20px;height:25px;" name="sub_but" id="sub_but" type="submit"> Generate Credentials </button>
+                {% endif %}
+            </form>
+          
+            <div class="modal-footer mx-auto" id="delete_buttons" {% if updateProfile %} style="display:none;" {% endif %}>
+                <a href="#" id="modal_left_button" class="btn btn-secondary btn_fade_blue"> {{left_button}}</a>
+                <a href="#" id="modal_right_button" class="btn btn-primary btn_blue">{{right_button}}</a>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+ {% if not dashboard %}
+
+ <script>
+    
+    function assignLink(event) {
+        console.log('fuckoff')
+        console.log(event.currentTarget)
+        var sub_but = document.getElementById('sub_but')
+        var value = event.currentTarget.getAttribute('data-id')
+        var data_action = event.currentTarget.getAttribute('data-action')
+        var data_type = event.currentTarget.getAttribute('data-type')
+        var data_flag = event.currentTarget.getAttribute('data-flag')
+        console.log('value',value)
+        var idName = `object-${value}`
+        console.log('id=name',idName)
+        var modal_left_button = document.getElementById('modal_left_button')
+        var perm_delete = document.getElementById('selection_hospital')
+        if (perm_delete) {
+            perm_delete = perm_delete.value
+        }
+        var modal_right_button = document.getElementById('modal_right_button')
+        var message = document.getElementById("modal-message-inner")
+        var object_name = document.getElementById(idName).textContent
+        var heading = document.getElementById('heading-pop')
+        if (data_action == 'restore') {
+            message.textContent = `Do you wish to restore the record for ${object_name} !`
+            modal_left_button.href = `/register/remove/` + `${data_type}/${value}?restore=True` 
+            modal_left_button.textContent = 'Restore'
+        
+            heading.textContent = "Restore Physician"
+
+            
+            return
+
+        } else if (data_action == 'delete') {
+            console.log("delete")
+            console.log(perm_delete,'perm')
+
+            if (perm_delete == 'del') {
+            message.textContent = `Do you want to Permanently delete the record for` + ` ${data_type} ` + ` ${object_name}. Note: Permanent Deleted records can not be restored/recovered.`
+            modal_left_button.href = `/register/remove/` + `${data_type}/${value}/?perm_delete=True`
+            heading.textContent = `Permanently Delete ${data_type} `
+            modal_left_button.textContent = 'Full Delete'
+            
+
+            } else {
+                var qs = ""
+                if (data_type == "physicianqs") {
+                    qs= true
+                }
+            
+            message.textContent = `Do you want to delete the record for` + ` ${data_type}: ` + `${object_name}.`
+            modal_left_button.href = `/register/remove/` + `${data_type}/` + `${value}/?qs=${qs}`
+            heading.textContent = `Delete ${data_type} `
+            modal_left_button.textContent = "Delete"
+            }
+
+        } else {
+            message.textContent = `Do you want to Send a Reminder To ${data_type} ${object_name}?`
+            heading.textContent = "Send Reminder"
+            
+            // var reminder_button = document.getElementById('reminder-button')
+            // var value1 = reminder_button.getAttribute('data-flag')
+            if (data_flag == 'reminder-qsp') {
+                
+                modal_left_button.href = `/views/invite/reminder/physician/${value}/`
+                
+                
+
+            } else {
+                modal_left_button.href = '/views/invite/reminder/' + `${value}/`
+
+            }
+            modal_left_button.textContent = 'Send Reminder'
+            
+
+        }
+        modal_right_button.textContent = 'Cancel'
+     
+        
+        
+
+    }
+
+</script>
+
+{% endif %}
+

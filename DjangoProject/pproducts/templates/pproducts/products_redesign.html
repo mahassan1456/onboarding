@@ -1,0 +1,519 @@
+{% extends 'medical/base2.html' %}
+
+{% load static %}
+
+{% block styles %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'pproducts/products.css' %}" type="text/css">
+<style>
+
+#more_details {
+    
+    background-color: #0fa942;
+    color:whitesmoke;
+    border-radius:7px;
+    border:0.5 solid gray;
+    width:75%;
+}
+.outer-container-button {
+    text-align: center;
+    position: relative;
+    width:100%;
+}
+.title {
+
+    margin-left:5vw;
+    display:inline-block;
+}
+.parent-mom-container {
+    margin-top:3vh;
+}
+
+form {
+    
+}
+.select-box {
+  position:relative;
+  margin-left:3vw;
+  display:inherit;
+}
+.select-body-part {
+  font-size: 20px;
+  border: 1.5px solid rgb(108, 102, 102);
+}
+select {
+  margin-left:1vw;
+}
+#addproduct {
+  color: rgb(45, 130, 69);
+  margin-left: 1vw;
+  size: 1.2rem;
+}
+
+.editproductlink {
+  color:#0fa942;
+  text-decoration: none;
+}
+
+#selectboxspecialty {
+  
+}
+
+.newspecialtylink {
+  margin-left:50vw;
+  color:green;
+}
+#newproductlink {
+  margin-left:1.5vw;
+  color:blue;
+}
+
+#editspecialtyview {
+  color:green;
+  color:rgb(137, 22, 22);
+  position:absolute;
+  left:82.6vw;
+}
+
+#productTitleTag {
+  text-transform: capitalize;
+  
+}
+
+.editproductlink {
+
+}
+#demotext {
+color: transparent;
+background: #666666;
+-webkit-background-clip: text;
+-moz-background-clip: text;
+background-clip: text;
+text-shadow: 0px 3px 3px rgba(255,255,255,0.5);
+}
+#select-physician-id{
+    display:inline;
+    
+}
+
+label {
+    margin-left:2vw;
+    
+    
+}
+#selectboxspecialty {
+    margin-bottom: 2vh;
+}
+
+#elect-hospital-id {
+    margin-left: 2vw;
+}
+#facility-label {
+    margin-right:1.2vw;
+}
+
+#select-box-child2 {
+   
+}
+
+
+.card-desc-box {
+  height:90px;
+  max-height: 90px;
+  overflow-y: scroll;
+}
+
+</style>
+
+{% endblock styles %}
+
+{% block content %}
+
+<h5>TESTING</h5>
+<div class="parent-mom-container">
+<div id="titleBox" class="title">
+  
+      <h2 id="titleLabel" style="display:inline;"> Products</h2>
+      {% if request.user.is_superuser %}
+      <a style="color:blue;" id="newproductlink" href="{% url 'pproducts:addproduct' %}" id="addproduct"><strong>Create New Product + </strong></a>
+      <a  class="newspecialtylink" href="{% url 'pproducts:addtags' %}" id="addTags"><strong>Create New Specialty + </strong></a></strong>
+    {% endif %}
+    <br>
+    {% if view %}
+    <h3 style="display:block;margin-top:1vh;" id="productTitleTag">{{tag | title}}&nbsp</h3>
+    {% else %}
+    <h3 style="display:inline;margin-top:1vh;" id="productTitleTag">{{tag | title}}&nbsp</h3>
+    {% endif %}
+    {% if view %}
+    <h4 id="demotext" style="display:inline;"> Physician: {{physician_name_first}} {{physician_name_last}}</h4>
+    {% endif %}
+    {% comment %}
+    {% if view %}
+    <a style="color:blue;" href="{url 'pproducts:filterproducts' physician.id %}?view=all&physician={{physician_id}}">All</a>
+    <a style="color:blue;" href="{url 'pproducts:filterproducts' physician.id %}?view=current&physician={{physician_id}}">Current Products</a>
+    {% endif %}
+    {% endcomment %}
+   
+</div>
+    
+    <div class="select-box" id="uniqueselect">
+        {% if request.user.is_superuser %}
+        <div id="hospital-select-container">
+            <label id="facility-label"for="select-hospital-id"> Facility </label>
+            <select onchange="populateDropDownPhysician(event)" style="font-size: 20px; border-radius: 6px;border: 1.5px solid rgb(108, 102, 102);" name="select-hospital" id="select-hospital-id">
+                <option value="N" id="all-box" selected >Please Select A Facility</option>
+                {% for facility in facilities %}
+                <option value="{{facility.id}}" id="nametitle-hospital" name="hospital"> {{facility.name|title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+        <div id="select-box-child2" {% if request.user.is_superuser %} style="margin-top:3.7vh;" {% endif %}>
+            {% csrf_token %}
+            
+            <div>
+            <label for="select-physician-id">  Physician</label>
+            <select onchange="displayProductsPhysicianSpecialty(event)" style="font-size: 20px; border-radius: 6px;border: 1.5px solid rgb(108, 102, 102);" name="select-physician" id="select-physician-id">
+                
+                <option value="N" selected >Please Select A Physician</option>
+                {% for physician in physicians %}
+                <option value="{{physician.id}}" id="nametitle-physician" name="physician"> {{physician.firstName|title}} {{physician.lastName|title}}</option>
+                {% endfor %}
+            </select>
+            </div>
+            <div style="margin-top:3.7vh">
+                <label for="selectboxspecialty"> Specialty </label>
+                <select id="selectboxspecialty" onchange="displayProductsPhysicianSpecialty(event)" style="font-size: 20px; border-radius: 6px;border: 1.5px solid rgb(108, 102, 102);" name="select-body-part" id="select-body-part-id">
+                <option value="" selected>Please Select A Specialty</option>
+                {% for specialty in specialties %}
+                <option value="{{specialty.tag}}" name="specialty" {% if view and specialty.tag == tag %} selected {% endif %}>{{specialty.tag|title}}</option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>  
+   <div class="outer-container1">
+     <div class="container" id="outer-cont-holder">
+
+      {% if view %}
+      {% for product in specialtyTags %}
+      <div class="card"><div class="card-header"><img {% if product.picture %} src="{{product.picture.url}}" {% else %}src="/media/products/Foam%20Roller%20Muscle%20Stretching/pexels-photo-2775196.jpeg" {% endif %} alt="rover" width="100" height="100"></div>
+      <div class="card-body">
+        <span class="tag tag-teal">leg</span><span><a class="editproductlink" href="{% url 'pproducts:editproduct' product.id %}?specialty={{tag}}"> Edit Product </a></span>
+        <h4>
+          {{product.name}}
+        </h4>
+        <p>
+          {{product.description}}
+        </p>
+        <div class="outer-container-button">
+            <button id="more_details"><a id="link2addprod" href="{% url 'pproducts:product2physician' product.id %}?specialty={{tag}}">Add Product</a></button>
+        </div>
+        </div></div>
+        {% endfor %}
+
+      {% endif %}
+        {% comment %}
+        HTML WILL BE DYNAMICALLY BE LOADED BY JAVASCRIPT HERE
+        {% endcomment %}
+    </div>
+  </div>
+
+</div>
+
+<script src="{% static 'pproducts/products.js' %}"></script>
+<script>
+
+  function populateDropDownSpecialty(event) {
+    return
+  }
+
+  function populateDropDownPhysician(event) {
+        var facility_id = event.target.value
+        console.log(facility_id)
+        var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+        var json_obj = {}
+        json_obj['facility'] = facility_id;
+        var callbackURL = "/pproducts/filter/hospital/"
+        $.ajax({
+            type: 'POST',
+            headers: { "X-CSRFToken": csrf_token },
+            dataType: "json",
+            data: json_obj,
+            url: callbackURL,
+            // Receiving JSON Response Back from DB
+            success: function(response) {
+                console.log(response)
+
+                if (response.dataset) {
+                    console.log(response.dataset)
+                    var dataset = response.dataset
+                    var outerContainer = document.getElementById("select-box-child2");
+                    var select = document.getElementById("select-physician-id");
+                    select.innerHTML = "";
+                    var option = document.createElement('option');
+                    option.value = "";
+                    option.selected = true;
+                    option.textContent = 'Please Select a Physician'
+                    select.appendChild(option)
+                    for (var i = 0; i < dataset.length; i++) {
+                        var HTML = `<option value=${dataset[i][0]} id="nametitle-physician" name="physician"> ${dataset[i][1]}  ${dataset[i][2]}</option>`
+                        select.insertAdjacentHTML('beforeend', HTML)
+                    }
+ 
+                }
+                // Write Javascript function here
+            },
+            error: function() {
+            console.log('error')
+            }
+        })
+        return
+  }
+  function buildProductCards(response,outercont) {
+        
+        var dataset = response.dataset;
+        if (!dataset) {
+        outercont.innerHTML = "";
+        return
+        }
+        var sspecialty = response.specialty
+        var pphysician = response.physician
+        // if (sspecialty && pphysician) {
+        //     console.log("specialty TRUE physician TRUE")
+        // }
+        // else if (pphysician && !sspecialty) {
+        //     console.log("physician TRUE specialty FALSE")
+        // 
+        // else if (!pphysician && sspecialty) {
+        //     console.log("physician TRUE specialty FALSE")
+        // }
+        var subheading = document.getElementById('productTitleTag')
+        subheading.textContent = sspecialty;
+        outercont.innerHTML = ""
+        console.log("dataset length",dataset.length)
+        for (let i = 0; i < dataset.length; i++) {
+        
+        var addProductsURL = '/pproducts/addproducts/physician/' + dataset[i][0]['id'] + '/?specialty=' + dataset[i][2]
+        var card = document.createElement('div')
+        card.classList.add('card')
+        var card_header = document.createElement('div')
+        card_header.classList.add('card-header')
+        
+        var html = `<img src='${dataset[i][1]}' alt='rover'/ width=100 height=100>`
+        card_header.insertAdjacentHTML('beforeend', html);
+        var card_body = document.createElement('div');
+        card_body.classList.add('card-body');
+        
+        html = `
+        <span class="tag tag-teal" class="tagselection">${dataset[i][2]}</span>
+            
+        <h4>
+            ${dataset[i][0]['name']}
+        </h4>
+        <p class="card-desc-box">
+            ${dataset[i][0]['description']}
+        </p>
+        <div class="outer-container-button">
+          <a id="link2addprod" href="${addProductsURL}"><button id="more_details">Add Product</button></a>
+        </div>
+        `
+        card_body.insertAdjacentHTML('beforeend', html)
+        card.appendChild(card_header)
+        card.appendChild(card_body)
+        outercont.appendChild(card);
+
+        if (response.superuser) {
+            console.log("testing to see it it makes it")
+            var editURL = '/pproducts/product/edit/' + dataset[i][0]['id'] + `/?specialty=${dataset[i][2]}` 
+            var tagLabel = card_body.firstElementChild
+            var link = `<span><a class="editproductlink" href="${editURL}"> Edit Product </a></span>`
+            tagLabel.insertAdjacentHTML('afterend', link)
+            var editspecialtylink = document.getElementById("editspecialtyview")
+            if (response.specialtyid) {
+            if (editspecialtylink) {
+            editspecialtylink.href = `/pproducts/products/tags/${response.specialtyid}/`
+            } else {
+            var titleBox = document.getElementById("titleBox")
+            var anchor = document.createElement("a")
+            var HREF = `/pproducts/products/tags/${response.specialtyid}/`
+            var HTML = `<a  id="editspecialtyview" href="${HREF}" id="addTags"> Edit Specialty + </a>`
+            titleBox.insertAdjacentHTML("beforeend", HTML)
+            }
+           } else {
+                if (editspecialtylink) {
+                    editspecialtylink.remove()
+                }
+           }
+          } 
+        }
+        
+}
+  function displayProductsPhysicianSpecialty(event) {
+    var outercont = document.getElementById('outer-cont-holder');
+    var csrf_token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    var physician_select = document.getElementById('select-physician-id').value;
+    var specialty_select = document.getElementById('selectboxspecialty').value;
+    if (!physician_select && !specialty_select) {
+        outercont.innerHTML = " <h3> No Products or Physicians Selected </h3>"
+        return
+    }
+    // var physician_value = document.
+    var json_obj = {}
+    json_obj['specialty'] = specialty_select;
+    json_obj['physician'] = physician_select;
+    console.log(json_obj)
+    var callbackURL = "/pproducts/filterproducts/script/";
+        $.ajax({
+        type: 'POST',
+        headers: { "X-CSRFToken": csrf_token },
+        dataType: "json",
+        data: json_obj,
+        url: callbackURL,
+        // Receiving JSON Response Back from DB
+        success: function(response) {
+
+            if (response) {
+                console.log("IT MADE IT HERE before buildproductcards", response)
+                buildProductCards(response,outercont)
+            } else {
+                outercont.innerHTML = '<h3> There is an Error Processing Your Request. Please try again later </h3>'
+            }
+            // Write Javascript function here
+        },
+        error: function() {
+        console.log('error')
+        }
+    })
+  }
+  function displayProducts(event) {
+    var outercont = document.getElementById('outer-cont-holder');
+    console.log(event.target.value)
+    if (event.target.value == "None") {
+      var editspecialtylink = document.getElementById("editspecialtyview")
+      editspecialtylink.remove()
+      outercont.innerHTML = "";
+      return
+    }
+    var token = document.querySelector("input[name=csrfmiddlewaretoken]").value;
+    console.log("testing")
+    var hiddenfield = document.getElementById('hidden_physician_id');
+    if (hiddenfield) {
+      hiddenfield_value = hiddenfield.value;
+      console.log("hidden field", hiddenfield_value)
+    } else {
+      hiddenfield_value = 0
+    }
+
+    var json_obj = {}
+    var specialty_label = event.target.value
+    json_obj['specialty'] = event.target.value; 
+    json_obj['physician_id'] = hiddenfield_value;
+    var callbackURL = "{% url 'pproducts:displayproducts' %}"
+    var mediaURL = "{{MEDIA_URL}}" 
+    console.log(mediaURL,'media')
+
+    $.ajax({
+              type: 'POST',
+              headers: { "X-CSRFToken": token },
+              dataType: "json",
+              data: json_obj,
+              url: callbackURL,
+              // Receiving JSON Response Back from DB
+              success: function(response) {
+                console.log(response)
+                if (response) {
+                  var dataset = response.dataset;
+                  if (!dataset) {
+                    outercont.innerHTML = "";
+                    return
+                  }
+                  var sspecialty = response.specialty
+                  var productdataset = response.products
+                 
+                  var subheading = document.getElementById('productTitleTag')
+                  subheading.textContent = sspecialty;
+                  outercont.innerHTML = ""
+                  for (let i = 0; i < dataset.length; i++) {
+                  
+                    var addProductsURL = '/pproducts/addproducts/physician/' + dataset[i][0]['id'] + '/?specialty=' + specialty_label 
+                    var card = document.createElement('div')
+                    card.classList.add('card')
+                    var card_header = document.createElement('div')
+                    card_header.classList.add('card-header')
+                    
+                    var html = `<img src='${dataset[i][1]}' alt='rover'/ width=100 height=100>`
+                    card_header.insertAdjacentHTML('beforeend', html);
+                    var card_body = document.createElement('div');
+                    card_body.classList.add('card-body');
+                    
+                    html = `
+                    <span class="tag tag-teal" class="tagselection">${specialty_label}</span>
+                     
+                    <h4>
+                      ${dataset[i][0]['name']}
+                    </h4>
+                    <p class="productdescriptions">
+                        ${dataset[i][0]['description']}
+                    </p>
+                    <div class="outer-container-button">
+                        <button id="more_details"><a id="link2addprod" href="${addProductsURL}">Add Product</a></button>
+                    </div>
+                    `
+                    card_body.insertAdjacentHTML('beforeend', html)
+                    card.appendChild(card_header)
+                    card.appendChild(card_body)
+                    outercont.appendChild(card);
+
+                    if (response.superuser) {
+                      console.log("testing to see it it makes it")
+                      var editURL = '/pproducts/product/edit/' + dataset[i][0]['id'] + `/?specialty=${sspecialty}` 
+                      var tagLabel = card_body.firstElementChild
+                      var link = `<span><a class="editproductlink" href="${editURL}"> Edit Product </a></span>`
+                      tagLabel.insertAdjacentHTML('afterend', link)
+                      var editspecialtylink = document.getElementById("editspecialtyview")
+
+                      if (editspecialtylink) {
+                        editspecialtylink.href = `/pproducts/products/tags/${response.specialtyid}/`
+                      } else {
+                        var titleBox = document.getElementById("titleBox")
+                        var anchor = document.createElement("a")
+                        var HREF = `/pproducts/products/tags/${response.specialtyid}/`
+                        var HTML = `<a  id="editspecialtyview" href="${HREF}" id="addTags"> Edit Specialty + </a>`
+                        titleBox.insertAdjacentHTML("beforeend", HTML)
+                      }
+                     } 
+                    }
+                   }
+
+              },
+              error: function() {
+              console.log('error')
+            }
+        })
+      }
+
+function boilerplateJavascript(event) {
+  // POST request must account for the CSRF TOKEN to Prevent Cross-Site-Request-Forgery
+  var _csrf_token = document.querySelector("input[type=hidden]").value;
+  var json_obj = {"Test": 15}
+  var callbackURL = "/pproducts/etc/etc/?querystring=ifneeded"
+  $.ajax({
+      type: 'POST',
+      headers: { "X-CSRFToken": csrf_token },
+      dataType: "json",
+      data: json_obj,
+      url: callbackURL,
+      // Receiving JSON Response Back from DB
+      success: function(response) {
+        // Write Javascript function here
+      },
+      error: function() {
+      console.log('error')
+    }
+  })
+}
+
+</script>
+
+{% endblock %}

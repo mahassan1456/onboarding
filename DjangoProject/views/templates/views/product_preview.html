@@ -1,0 +1,16 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+
+{% block content %}
+
+<h2><a href="{% url 'support:addProduct' %}">Add New Product</a></h2>
+<h2><a href="{% url 'support:addSpecialty' %}">Add New Specialty</a></h2>
+
+{% endblock %}

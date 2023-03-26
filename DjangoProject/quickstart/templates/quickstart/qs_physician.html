@@ -1,0 +1,175 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load views_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+
+<!-- Start Recommended Products Section -->
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <h1>Invite a Physician</h1>
+        </div>
+    </div>
+    <!-- start filter -->
+    <form class="py-4 needs-validation" method="POST">
+    <div class="row">
+        <div class="col-md-4 filter mx-auto">
+            <label>{{form.hospital_type.label}}</label> 
+            {{form.hospital_type}}
+        </div>
+    </div>
+
+    <!-- end filter -->	 
+</div>
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <div class="login_wrap">
+                
+                    {% csrf_token %}
+                    <div class="row" id="hospital_onboarded_b" style="display:none;">
+                        <div class="form-group has_input_icon col-12">
+                            <label id="hospitalModelLabel">Hospital</label> 
+                            {{form.hospital}}
+                        </div>
+                    </div>
+                    <div class="row" id="hospital_invited_b" style="display:none;">
+                        <div class="form-group has_input_icon col-12">
+                            <label id="hospitalInviteLabel">Recently Invited</label> 
+                            {{form.hospital_invite}}
+                        </div>
+                    </div>
+                    <div class="row" id="hospital_new_b" style="display:none;">
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label id="hospitalNameBoxLabel">{{form.hospital_name.label}}</label>
+                            {{form.hospital_name}}
+                        </div>
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            {% if form.hospital_email.errors %}
+                            <span>{{form.hospital_email.errors}}</span>
+                            {% endif %}
+                            <label id="newHospitalZipLabel">{{form.hospital_email.label}}</label> 
+                            {{form.hospital_email}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>{{form.first_name.label}}</label> 
+                            {{form.first_name}}
+                        </div>
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>{{form.last_name.label}}</label> 
+                            {{form.last_name}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>Email</label> 
+                            {{form.email}}
+                            <label class="my-3">Email options</label> 
+                            {{form.email_options}}
+                        </div>
+                        <div class="form-group has_input_icon col-md-6 col-12">
+                            <label>Specialties</label>
+                            <small class="float-left">For Multiselect hold Ctrl(windows) or Cmd(mac)</small>
+                            {{form.specialty}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-md-12 col-12">
+                            <label id="emailMessageLabel" style="display:none;" >Email message</label> 
+                            {{form.email_message}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group has_input_icon col-12">
+                            <button type="submit" id="form_btn_id" class="btn-primary btn-lg btn-block primary_btn">Send Invite</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Start Accordian JS -->
+<script>
+    $(document).ready(function () {
+    	$("#accordion li > h4").click(function () {
+    
+    		if ($(this).next().is(':visible')) {
+    			$(this).next().slideUp(300);
+    			$(this).children(".plusminus").text('+');
+    		} else {
+    			$(this).next("#accordion ul").slideDown(300);
+    			$(this).children(".plusminus").text('-');
+    		}
+    	});
+    });
+    
+    function populateName(event) {
+        var value = event.target.value 
+        var hospitalName = document.getElementById('hospitalNameBox')
+        if (value) {
+            hospitalName.style.display = 'none'
+            hospitalName.previousElementSibling.style.display = 'none';
+        } else {
+            hospitalName.style.display = 'block'
+            hospitalName.previousElementSibling.style.display = 'block';
+        }
+        }
+    
+        function populateSelections(event) {
+        var value = event.target.value;
+
+        var hospital_onboarded_b = document.getElementById('hospital_onboarded_b')
+        var hospital_invited_b = document.getElementById('hospital_invited_b')
+        var hospital_new_b = document.getElementById('hospital_new_b')
+
+    
+        if (value == 'new') {
+    
+            hospital_new_b.style.display = 'block'
+            hospital_invited_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+        } else if (value == 'onboarded') {
+            hospital_onboarded_b.style.display = 'block';
+            hospital_invited_b.style.display = 'none'
+            hospital_new_b.style.display = 'none'
+        } else if (value == 'invite') {
+
+            hospital_invited_b.style.display = 'block'
+            hospital_new_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+ 
+        } else {
+            hospital_invited_b.style.display = 'none'
+            hospital_new_b.style.display = 'none'
+            hospital_onboarded_b.style.display = 'none';
+        }
+        }
+    
+        function buildEmailFields(event) {
+        var selectValue = event.target.value
+        console.log(selectValue)
+        var emailMessageValue = document.getElementById('emailmessagebox')
+        var emailMessageLabel = document.getElementById('emailMessageLabel')
+        
+    
+        if (selectValue == '1') {
+            emailMessageValue.style.display = 'block'
+            emailMessageLabel.style.display = 'block'
+        } else {
+            emailMessageValue.style.display = 'none';
+            emailMessageLabel.style.display = 'none'
+        }
+        }
+</script>
+<!-- End Accordian JS -->
+{% endblock %}

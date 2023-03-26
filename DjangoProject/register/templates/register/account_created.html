@@ -1,0 +1,35 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!--   -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+
+
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+	 
+ {% block content %}
+
+ <!-- Start Content -->
+	
+<div class="container login_signup_wrap">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+			<div class="login_wrap">
+				<div class="alert alert-success" role="alert">
+					Congratulations
+					<p>We are excited to announce that your hospital account details 
+					for <strong>{{hospital.name}}</strong> have been submitted successfully!</p>
+				</div> 
+				<div class="col-12 col-md-8 mx-auto"> 
+					<button type="submit" class="btn-primary btn-lg btn-block primary_btn mt-4 float-left"> <a style="color:white;background-color:inherit;" href="{% url 'register:createCredentials' admin.id %}"> Please Create Log In Credentials </a></button>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+<!-- END -->
+	
+{% endblock %}

@@ -1,0 +1,69 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    {% if searchTerms %}
+    <div>
+        <h3>Search Results for "{{searchTerms}}"" returned {{object_set| length }} results.</h3>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res" method="POST" action="./?search=True&qs={{qs}}" novalidate>
+              {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        {% if request.user.is_superuser %}
+                        {% if request.GET.qs or qs %}
+                        {% include 'views/components/qs_physicians_table.html' %}
+                        {% else %}
+                        {% include 'views/components/physicians_table.html' %}
+                        {% endif %}
+                        {% else %}
+                        {% include 'views/components/physicians_table.html' %}
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Modal -->
+{% include 'dashboard/components/pop_up_action.html' %}
+
+{% comment %}
+<script src="{% static 'views/js/functions.js' %}?version=11">
+</script>
+{% endcomment %}
+<script>
+
+function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var URL = `${event.target.getAttribute("data-label")}?datatype=product`
+        var hospital_id = document.getElementById('selected_hospital').value
+        var search_box = document.getElementById('search_box').value
+        var url = "{% url 'support:downloadXLS' %}" + "?datatype=physicians" + `&selected_hospital=${hospital_id}&search=${search_box}&qs=` + "{{qs}}"
+     
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "physicians.xlsx"
+            a.click()
+        })
+    }
+
+</script>
+{% endblock %}

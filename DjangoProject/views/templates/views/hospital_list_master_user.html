@@ -1,0 +1,230 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- This is for sending a quick invite to a physician. -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+
+<div class="container mt-2">
+    <!-- Start Physicians List -->
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res" method="POST">
+                {% csrf_token %}
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="w-100">Hospital List <a href="{% url 'register:register' %}">Add Hospital</a><a href="{% url 'views:view_qs_hospitals' %}"> Invited/Manually Onboarded</a><button onclick="downloadXLS(event)" >Download XLSX</button></h2>
+                        </div>
+                       
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" name="search" id="search_box" class="form-control" placeholder="Search Hospital By Name,City,State,Zip">
+                                <div class="input-group-btn">
+                                    <button class="btn1 btn-default" name="button" value="onboarded" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            {% for error in form.non_field_errors %}
+                                <p>{{error}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th>Hospital Name</th>
+                                    <th>Admin Name</th>
+                                    <th>Status</th>
+                                    <th>Tax ID</th>
+                                    <th>Address</th>
+                                    <th class="text-center">Total Physicians</th>
+                                    <th class="text-center">Email</th>
+                                    <th>Website</th>
+                                    <th class="text-center">Edit</th>
+                                    {% if request.user.is_superuser %}
+                                    <th class="text-center">Remove</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hospital in hospital_set %}
+                                <h2>{{hospital.admin_name}}</h2>
+                                <tr>
+                                    <td id="object-{{hospital.id}}" >{{hospital.name}}</td>
+                                    {% comment %}
+                                    <td>{% if not hospital.user or not hospital.user.username or hospital.user.username == 'unassigned' %} <a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" class="red">Assign Admin</a> {% else %} {{hospital.user.username}} {% endif %} </td>
+                                   
+                                    <td>
+                                        {% if hospital.getStatus == %}
+
+                                        {% elif %}
+                                        {% else %}
+                                        {% endif %}
+                                            {% if hospital.is_manual %}
+                                            <a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-email="{{hospital.email}}" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" class="red"> Send Reminder</a>
+                                            {% else %}
+                                            <a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-email="{{hospital.email}}" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" class="red" style="color:yellow;">Registered</a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-email="{{hospital.email}}" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" class="red"> Send Invite</a>
+                                        {% endif %} 
+                                    </td>
+                                    {% endcomment %}
+
+                                    <td><a href="#" onclick="assignLinkDashboard(event)" data-action="email" data-email="{{hospital.email}}" data-type="hospital" data-toggle="modal" data-name="{{hospital.name}}" data-id="{{hospital.id}}" data-target="#reminder" data-email_type="{{hospital.getStatus}}"> {{hospital.admin_name}}</a></td>
+                                    <td>
+                                        {% if hospital.has_physicians %}
+                                            <span style="color:green;">Recommending</span>
+                                        {% else %}
+                                            <span style="color:red;">Not Recommending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{hospital.taxid}}</td>
+                                    <td>{{hospital.get_full_address}}</td>
+                                    <td class="text-center">{{hospital.total_physicians}}</td>
+                                    <td>{% if hospital.email %} {{hospital.email}} {% else %} N/A {% endif %}</td>
+                                    <td>{{hospital.website}}</td>
+                                    <td class="text-center"><a href="{% url 'register:editHospital' hospital.id %}" class=" "><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                    {% comment %}
+                                    <td class="text-center"><a href="#" class=" "><i class="fa-solid fa-trash-can"></i></a></td>
+                                    {% endcomment %}
+                                    {% if request.user.is_superuser %}
+                                    <td class="text-center"><a href="#" onclick="assignLinkDashboard(event)" data-toggle="modal" data-id="{{hospital.id}}" data-type="hospital" data-action="delete" data-target="#reminder"  class="red"><i class="fa-solid fa-trash-can"></i></a></td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Physicians List -->
+</div>
+<!-- Modal -->
+{% include 'dashboard/components/pop_up_action.html' %}
+
+
+{% comment %}
+<div class="modal fade" id="update_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="mx-auto">Physician profile is not completed</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please Send Reminder To Physician OR Complete Yourself!</strong></p>
+            </div>
+            <div class="modal-footer mx-auto">
+                <a href="#" class="btn btn-secondary btn_fade_blue">Send Reminder</a>
+                <a href="#" class="btn btn-primary btn_blue">Complete Yourself</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+<script>
+
+
+function downloadXLS(event) {
+        event.preventDefault()
+        // building URL to call for data
+        var URL = `${event.target.getAttribute("data-label")}?datatype=product`
+        
+        var search_box = document.getElementById('search_box').value
+        var url = "{% url 'support:downloadXLS' %}" + "?datatype=hospital" + `&selected_hospital=&search=${search_box}&qs=`
+     
+        fetch(url)
+        .then((res) => {
+            return res.blob(); 
+        }).then((data) => {
+            var a = document.createElement("a");
+            a.href = window.URL.createObjectURL(data);
+            a.download = "physicians.xlsx"
+            a.click()
+        })
+    }
+
+     function assignLinkDashboard(event) {
+        console.log(event.currentTarget)
+        var value = event.currentTarget.getAttribute('data-id')
+        var isemailed= event.currentTarget.getAttribute('data-email')
+        var isemailed_type= event.currentTarget.getAttribute('data-email_type')
+        var data_type = event.currentTarget.getAttribute('data-type')
+        var data_action = event.currentTarget.getAttribute('data-action')
+        var data_name = event.currentTarget.getAttribute('data-name')
+        var idName = `object-${value}`
+
+        var modal_left_button = document.getElementById('modal_left_button')
+        var modal_right_button = document.getElementById('modal_right_button')
+        var heading = document.getElementById('heading-pop')
+        var message = document.getElementById("modal-message-inner")
+        var form = document.getElementById('manual-form')
+        var delete_buttons = document.getElementById('delete_buttons')
+        var alreadyemailed = ''
+       
+        var object_name = document.getElementById(idName).textContent
+       
+        if (data_action == 'delete') {
+        form.style.display = 'none'
+        delete_buttons.style.display ='block'
+        heading.textContent = `Remove ${data_type}`
+        message.textContent = `Do you want to delete the record for ` + `${data_type} ` + `${object_name}`
+        modal_left_button.textContent = "Delete"
+        modal_right_button.textContent = "Cancel"
+        modal_left_button.href = `/register/remove/` + `${data_type}` + `${value}/`
+        } else if (data_action == 'email') {
+            // if (isemailed)  {
+            //     heading.textContent = `Re-Send Credentials`
+            //     message.textContent = `Do you want to resend credentials for` + ` ${data_name} to ${isemailed}. The auto-generated credentials will be sent to the email address provided.` 
+            //     form.style.display = 'none'
+
+            // } else {
+            //     heading.textContent = `Auto-Assign ${data_type}`
+            //     message.textContent = `Do you want to Auto-Assign credentials for` + ` ${data_name}. The auto-generated credentials will be sent to the email address provided.` 
+            //     form.style.display = 'block'
+            // }
+            var sub_but = document.getElementById('sub_but')
+                if (isemailed_type == "Send Reminder") {
+                    heading.textContent = `Re-Assign ${data_type}`
+                    message.textContent = `Do you want to Re-Assign credentials for` + ` ${data_name}. The entered email and auto generated password will replace the current email/password combination associated with the account.`
+                   
+                    sub_but.textContent = "Send Reminder"
+
+
+                } else if (isemailed_type == "Send New Invite") {
+                    heading.textContent = `Auto-Assign ${data_type}`
+                    message.textContent = `Do you want to Auto-Assign credentials for` + ` ${data_name}. The auto-generated user credentials will be sent to the email address provided.` 
+                    sub_but.textContent = "Auto Assign Admin"
+                }
+
+                form.style.display = 'block'
+                modal_left_button.textContent = "Send"
+                modal_right_button.textContent = "Cancel"
+        
+                form.action = `/quickstart/assignadmin/` + `${value}/?isemailed=${isemailed}?autocreate=True`
+                delete_buttons.style.display ='none'
+
+        } else {
+        form.style.display = 'none'
+        delete_buttons.style.display ='block'
+        message.textContent = `Please Send Reminder To Hospital ${object_name} User OR Complete Registration Yourself!`
+        modal_left_button.textContent = "Send Reminder"
+        modal_right_button.textContent = "Complete Manually"
+        }
+        
+      
+    }
+</script>
+{% endblock %}

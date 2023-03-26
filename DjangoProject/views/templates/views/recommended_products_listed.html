@@ -1,0 +1,140 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Detailed View Page for Physician-->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+{% block content %}
+<!-- Start About Physician Section -->
+
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
+            <img src="{{physician.returnPictureURL}}" class="physician_picture">
+        </div>
+        <div class="col-lg-9 col-md-12">
+            <div class="auto_data_fill">
+                <div class="form-group has_input_icon col-12 col-md-6 ">
+                    <label>Hospital Name</label>
+                    <div>{{physician.facility.name}}</div>
+                </div>
+                <div class="form-group has_input_icon col-md-6 col-12">
+                    <label>Physician name</label>
+                    <div>{{physician.get_full_name}}</div>
+                </div>
+                <div class="form-group has_input_icon col-12 col-md-6 ">
+                    <label>Physician Email</label>
+                    <div>{{physician.email}}</div>
+                </div>
+                <div class="form-group has_input_icon col-md-6 col-12">
+                    <label>Physician Specialty</label>
+                    <div>{{physician.buildSpecialtyString}}</div>
+                </div>
+            </div>
+            <div class="physician_detail">
+				<p>{{physician.about_me}}</p>
+				{% comment %}
+                <p>Dr. Alberto Carli specializes in minimally invasive joint replacement involving the hip and the knee. He treats patients suffering from osteoarthritis, rheumatoid arthritis, post-traumatic arthritis, avascular necrosis, hip dysplasia, hip fracture, and bowlegged or knock-knee deformity. Dr. Carli also assesses previous joint replacement surgeries that have been complicated by fractures, dislocations or infections. Dr. Carli employs rapid-recovery protocols to help patients mobilize on the same day as surgery. He is experienced in performing outpatient (same-day discharge) surgery on eligible patients, customizing treatments for each patient. His priority is to ensure that patients understand their diagnosis, feel empowered in making the decision to proceed with surgery, and feel satisfied with their recovery.</p>
+				{% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End About Physician Section -->	 
+<!-- start Physician Recommended Products Listed -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form class="pt-4 body_content_wrapper sm_res">
+                <div class="col-12 pl-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="float-left mr-3 mt-2">Recommended Products</h2>
+                            <a href="{% url 'register:editPhysician' physician.id %}" class="btn btn-primary btn2_blue float-left ">Edit Recommended Products</a>  
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered my-3 table-sm table-hover">
+                            <thead>
+                                <tr class="align-text-top">
+                                    <th class="text-center">Picture</th>
+                                    <th>Product Name</th>
+                                    <th>Body Part</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+								
+								{% for specialty,products in physician.buildProductList.items %}
+								{% for product in products %}
+                                {% if product.1.1 %}
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="{{product.1.0.getPictureURL}}"></a></td>
+                                    <td>{{product.1.0.name}}<a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>{{specialty}}</td>
+									
+                                </tr>
+                                {% endif %}
+								{% endfor %}
+								{% endfor %}
+								
+								{% comment %}
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/ADL4.jpg"></a></td>
+                                    <td>ADL Kit  <a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/bottle-sizes-min.png"></a></td>
+                                    <td>BioCorneum Scar Cream  <a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/POLAR-CARE-WAVE-UNIT_COVER-OFF-0004_470x.jpg"></a></td>
+                                    <td>Breg Polar Wave <a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/61415a7a7e748a1edc6d7198_Circul8-Pro-Float.png"></a></td>
+                                    <td>Home DVT Device  <a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/61lkXjK0GL._AC_SX679_.jpg"></a></td>
+                                    <td>Massage Gun<a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" class="physician_sm_pic"><img src="images/PROCompressionGraduatedCompressionkneesleeve.jpg"></a></td>
+                                    <td>PRO Compression Knee Sleeve <a href="#" class="view_details"> (View Product Detail)</a></td>
+                                    <td>Knee</td>
+                                </tr>
+								{% endcomment %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Physician Recommended Products Listed -->	
+<!-- Start Accordian JS -->
+<script>
+    $(document).ready(function () {
+    	$("#accordion li > h4").click(function () {
+    
+    		if ($(this).next().is(':visible')) {
+    			$(this).next().slideUp(300);
+    			$(this).children(".plusminus").text('+');
+    		} else {
+    			$(this).next("#accordion ul").slideDown(300);
+    			$(this).children(".plusminus").text('-');
+    		}
+    	});
+    });
+    
+</script>	
+<!-- End Accordian JS -->
+{% endblock %}

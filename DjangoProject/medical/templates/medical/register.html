@@ -1,0 +1,57 @@
+{% extends 'medical/base.html' %}
+
+{% load static %}
+
+{% block styles %}
+
+<link rel="stylesheet" href="{% static 'medical/style.css' %}" type="text/css">
+
+
+{% endblock styles %}
+
+{% block content %}
+<form action="" method="post" class="signup-form">
+    {% csrf_token %}
+    <div class="bbt">
+        <div id="header-container">
+            <div class="form-header">
+                <h1>Add Hospital</h1>
+            </div>
+        </div>
+        <div class="form-body">
+            <div class="horizontal-group">
+                {% for field in form %}
+                <div class="form-group" id="padme">
+                    <label for="firstname" class="label-title"> {{field.label}} </label>
+                </div>
+                <div class="form-group left">
+                    <span>{{field}}</span>
+                </div>
+                {% endfor %}
+                <div id="bb2">
+                    <input id="bb" type="submit">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-footer">
+    </div>
+</form>
+{% endblock %}
+{% comment %}
+
+<!-- <form action="" method="post">
+
+    {% csrf_token %}
+
+    {% for field in form %}
+
+    <div>
+        {{field.label}}
+        {{field}}
+    </div>
+
+    {% endfor %}
+</form> -->
+
+{% endcomment %}

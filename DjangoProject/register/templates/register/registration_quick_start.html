@@ -1,0 +1,92 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!--   -->
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+
+
+{% extends 'register/base.html' %}
+{% load static %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+
+<!-- BEGIN HTML BLOCK -->
+
+{% block content %}
+      
+ <!-- Start Login -->
+ 
+ <div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+            <h1>Please Update Your Hospital Account Details</h1>
+            <p>Already have an account? <a href="login.html">Sign In</a> </p>
+            <div class="hospital_icon"></div>
+        </div>
+    </div>
+</div>
+   
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto"> 
+            {% include 'register/non_field_errors.html' %}
+            <div class="login_wrap">
+                 <!-- Prefilled Container for Information obtained from QuickStart Hospital Information-->
+                <div class="auto_data_fill">
+                
+                    <div class="form-group has_input_icon col-12 col-md-6 ">
+                        <label>Hospital Name</label>
+                        <div>{% if qs_hosp.hospital_name %} {{qs_hosp.hospital_name}} {% else %} Not Provided {% endif %}</div>
+                    </div> 
+
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>Hospital Zip</label>
+                        <div>{% if qs_hosp.hospital_zip %} {{qs_hosp.hospital_zip}} {% else %} Not Provided {% endif %}</div>
+                    </div>
+                    
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>Admin Name</label>
+                        <div> {{qs_hosp.get_full_name}}</div>
+                    </div>
+                    
+                    <div class="form-group has_input_icon col-12 col-md-6 ">
+                        <label>Email Address</label>
+                        <div>{% if qs_hosp.email %}  {{qs_hosp.email}} {% else %} Not Provided {% endif %}</div>
+                    </div> 
+                    
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>Phone number</label>
+                        <div>{% if qs_hosp.phone %} {{qs_hosp.phone}} {% else %} Not Provided {% endif %}</div>
+                    </div>
+                    <div class="form-group has_input_icon col-md-6 col-12" style="margin-top:50px;position:relative;right:115px;">
+                        <label>Additional Information</label>
+                        <div style="position:relative;right:175px;width:100%;" >{% if qs_hosp.additional %} {{qs_hosp.additional}} {% else %} No Additional Information {% endif %}</div>
+                    </div>
+
+                </div>
+            
+                <form enctype="multipart/form-data" class="py-4 needs-validation" method="POST" action="" novalidate>
+                    {% csrf_token %}
+                    <!-- Included HTML is located at DjangoProject/register/templates/register/register_form.html -->
+                    {% include 'register/register_form.html' %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+let phoneNumber = document.getElementById('id_phone');
+phoneNumber.addEventListener('change',_formatPhoneNumber);
+phoneNumber.addEventListener('keyup',_formatPhoneNumber);
+
+function _formatPhoneNumber(evt) {
+    let number = evt.target.value.replace(/[^\d]/g, '');
+    if (number.length > 9) {
+        number = `${number.slice(0, 3)}-${number.slice(3,6)}-${number.slice(6,)}`
+    } 
+    evt.target.value = number;
+}
+</script>
+
+{% endblock %}

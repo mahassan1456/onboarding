@@ -1,0 +1,79 @@
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+<!-- Edit View for Physician Details --> 
+<!-- --------------------------------------------------------DESCRIPTION----------------------------------------------------------------- -->
+{% extends 'register/base.html' %}
+{% load static %}
+{% load dashboard_tags %}
+{% block head %}
+{{block.super}}
+{% endblock head %}
+<!-- BEGIN HTML BLOCK -->
+{% block content %}
+<!-- Start Recommended Products Section -->
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-12 mx-auto">
+            <h4>Welcome Carlie {Physician Name} BSSC {Hospital Name}</h4>
+            <h5>Please Edit Your Details</h5>
+        </div>
+    </div>
+</div>
+<div class="container login_signup_wrap">
+    <div class="row">
+        <div class="col-md-12 col-12 mx-auto">
+            <div class="login_wrap">
+                <form class="py-4 needs-validation">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img {% if pictureURL %} src="{{pictureURL}}" {% else %} src="images/alberto-carli-headshot.jpg" {% endif %} class="physician_picture">
+                        </div>
+                        <div class="form-group has_input_icon col-md-9">
+                          {% for field in form %}
+                          {% if field.name == 'picture' %}
+                            <label>Please Change Your Picture</label>
+                            <input class="form-control" type="file" id="formFile">
+                          {% elif field.name == 'about_me' %}
+                            <label class="my-3">About Physician</label>
+                            {{field}}
+                          {% endif %}
+                          {% endfor %}
+                        </div>
+                    </div>
+                    {% for field in form %}
+
+                    {% if field.name != 'about_me' and field.name != 'picture' %}
+                    <div class="form-group has_input_icon col-md-6 col-12">
+                        <label>{{field.label}}</label> 
+                        {{field}}
+                    </div>
+                    
+                    {% include 'quickstart/recommended_products_template.html' %}
+                    {% endif %}
+                    {% endfor %}
+                    <div class="form-group has_input_icon col-12 col-md-12">
+                        <button type="submit" class="btn-primary btn-lg btn-block primary_btn my-4 float-left">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Recommended Products Section -->	 
+<script>
+    $(document).ready(function () {
+    	$("#accordion li > h4").click(function () {
+    
+    		if ($(this).next().is(':visible')) {
+    			$(this).next().slideUp(300);
+    			$(this).children(".plusminus").text('+');
+    		} else {
+    			$(this).next("#accordion ul").slideDown(300);
+    			$(this).children(".plusminus").text('-');
+    		}
+    	});
+    });
+    
+</script>
+<script src="{% static 'quickstart/js/welcomePhysician.js' %}?version=3.6"></script>
+<!-- End Accordian JS -->
+{% endblock %}
